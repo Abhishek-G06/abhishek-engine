@@ -92,7 +92,7 @@ const ProjectsSection = () => {
               .map((project, index) => (
                 <div
                   key={project.title}
-                  className={`group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${
+                  className={`group relative bg-card/60 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm border border-border/30 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/10 before:via-transparent before:to-transparent before:pointer-events-none ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                   style={{ transitionDelay: `${index * 150 + 200}ms` }}
@@ -155,7 +155,7 @@ const ProjectsSection = () => {
               .map((project, index) => (
                 <div
                   key={project.title}
-                  className={`group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500 ${
+                  className={`group relative overflow-hidden bg-card/60 backdrop-blur-md p-6 rounded-xl border border-border/30 hover:border-primary/30 hover:shadow-lg transition-all duration-500 before:absolute before:inset-0 before:rounded-xl before:bg-gradient-to-br before:from-white/10 before:via-transparent before:to-transparent before:pointer-events-none ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                   style={{ transitionDelay: `${index * 100 + 600}ms` }}

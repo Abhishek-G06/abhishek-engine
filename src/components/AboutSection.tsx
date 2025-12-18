@@ -75,7 +75,7 @@ const AboutSection = () => {
               {highlights.map((item, index) => (
                 <div
                   key={item.title}
-                  className={`p-6 bg-card rounded-xl shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1 border border-border/50 ${
+                  className={`relative overflow-hidden p-6 bg-card/60 backdrop-blur-md rounded-xl shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1 border border-border/30 before:absolute before:inset-0 before:rounded-xl before:bg-gradient-to-br before:from-white/10 before:via-transparent before:to-transparent before:pointer-events-none ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                   style={{ transitionDelay: `${index * 100 + 200}ms` }}

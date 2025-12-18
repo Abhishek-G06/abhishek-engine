@@ -128,7 +128,7 @@ const ContactSection = () => {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500 ${
+                      className={`relative overflow-hidden p-3 rounded-lg bg-card/60 backdrop-blur-md border border-border/30 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500 before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-white/10 before:via-transparent before:to-transparent before:pointer-events-none ${
                         isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
                       }`}
                       style={{ transitionDelay: `${index * 100 + 500}ms` }}
@@ -150,7 +150,7 @@ const ContactSection = () => {
             >
               <form
                 onSubmit={handleSubmit}
-                className="bg-card p-8 rounded-2xl shadow-sm border border-border/50"
+                className="relative overflow-hidden bg-card/60 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-border/30 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/10 before:via-transparent before:to-transparent before:pointer-events-none"
               >
                 <div className="grid sm:grid-cols-2 gap-6 mb-6">
                   <div>
