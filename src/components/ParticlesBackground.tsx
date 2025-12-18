@@ -3,6 +3,8 @@ import { useEffect, useRef } from 'react';
 interface Particle {
   x: number;
   y: number;
+  baseX: number;
+  baseY: number;
   size: number;
   speedX: number;
   speedY: number;
@@ -13,6 +15,7 @@ const ParticlesBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>();
+  const mouseRef = useRef({ x: -1000, y: -1000 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,13 +30,17 @@ const ParticlesBackground = () => {
     };
 
     const createParticles = () => {
-      const particleCount = Math.min(50, Math.floor(window.innerWidth / 30));
+      const particleCount = Math.min(60, Math.floor(window.innerWidth / 25));
       particlesRef.current = [];
       
       for (let i = 0; i < particleCount; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
         particlesRef.current.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
+          x,
+          y,
+          baseX: x,
+          baseY: y,
           size: Math.random() * 2 + 1,
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
@@ -45,25 +52,44 @@ const ParticlesBackground = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Get computed color from CSS variable
       const computedStyle = getComputedStyle(document.documentElement);
       const primaryHsl = computedStyle.getPropertyValue('--primary').trim();
+      const mouse = mouseRef.current;
+      const interactionRadius = 120;
       
       particlesRef.current.forEach((particle) => {
-        // Update position
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
+        // Calculate distance from mouse
+        const dx = mouse.x - particle.x;
+        const dy = mouse.y - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Mouse repulsion effect
+        if (distance < interactionRadius && distance > 0) {
+          const force = (interactionRadius - distance) / interactionRadius;
+          const angle = Math.atan2(dy, dx);
+          particle.x -= Math.cos(angle) * force * 3;
+          particle.y -= Math.sin(angle) * force * 3;
+        } else {
+          // Slowly return to base movement
+          particle.x += particle.speedX;
+          particle.y += particle.speedY;
+        }
+
+        // Update base position for drifting
+        particle.baseX += particle.speedX;
+        particle.baseY += particle.speedY;
 
         // Wrap around edges
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
+        if (particle.x < 0) { particle.x = canvas.width; particle.baseX = canvas.width; }
+        if (particle.x > canvas.width) { particle.x = 0; particle.baseX = 0; }
+        if (particle.y < 0) { particle.y = canvas.height; particle.baseY = canvas.height; }
+        if (particle.y > canvas.height) { particle.y = 0; particle.baseY = 0; }
 
-        // Draw particle
+        // Draw particle with glow effect near mouse
+        const glowIntensity = distance < interactionRadius ? 1 + (1 - distance / interactionRadius) * 0.5 : 1;
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${primaryHsl}, ${particle.opacity})`;
+        ctx.arc(particle.x, particle.y, particle.size * glowIntensity, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${primaryHsl}, ${particle.opacity * glowIntensity})`;
         ctx.fill();
       });
 
@@ -78,7 +104,7 @@ const ParticlesBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `hsla(${primaryHsl}, ${0.1 * (1 - distance / 150)})`;
+            ctx.strokeStyle = `hsla(${primaryHsl}, ${0.15 * (1 - distance / 150)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -86,6 +112,14 @@ const ParticlesBackground = () => {
       });
 
       animationRef.current = requestAnimationFrame(animate);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
     };
 
     resizeCanvas();
@@ -96,12 +130,16 @@ const ParticlesBackground = () => {
       resizeCanvas();
       createParticles();
     });
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 
