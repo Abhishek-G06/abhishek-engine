@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import heroAvatar from "@/assets/hero-avatar.png";
-import HeroScene from "@/components/3d/HeroScene";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
 const HeroSection = () => {
@@ -19,9 +18,6 @@ const HeroSection = () => {
     >
       {/* Parallax Background */}
       <ParallaxBackground variant="hero" />
-      
-      {/* 3D Background Scene */}
-      <HeroScene />
       
       {/* Subtle gradient overlay for readability */}
       <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-transparent to-background/70 pointer-events-none" style={{ zIndex: 1 }} />
