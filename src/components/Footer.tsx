@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+import { Heart, Zap } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,25 +11,29 @@ const Footer = () => {
   };
 
   const footerLinks = [
-    { label: "About", id: "about" },
-    { label: "Skills", id: "skills" },
-    { label: "Projects", id: "projects" },
-    { label: "Contact", id: "contact" },
+    { label: "ABOUT", id: "about" },
+    { label: "SKILLS", id: "skills" },
+    { label: "PROJECTS", id: "projects" },
+    { label: "CONTACT", id: "contact" },
   ];
 
   return (
-    <footer className="bg-card border-t border-border">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="relative overflow-hidden border-t border-primary/20">
+      <div className="absolute inset-0 bg-grid opacity-20" />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
             <button
               onClick={() => scrollToSection("hero")}
-              className="text-xl font-bold text-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-2 text-xl font-display font-bold text-foreground hover:text-primary transition-colors"
             >
-              Portfolio
+              <Zap className="w-5 h-5 text-primary" />
+              <span className="text-glow-cyan">PORT</span>
+              <span className="text-secondary">FOLIO</span>
             </button>
-            <p className="text-sm text-muted-foreground mt-2">
-              Building digital experiences that matter.
+            <p className="text-sm text-muted-foreground mt-2 font-mono">
+              // Building the future, one line at a time
             </p>
           </div>
 
@@ -38,7 +42,7 @@ const Footer = () => {
               <button
                 key={link.id}
                 onClick={() => scrollToSection(link.id)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors font-display tracking-wider"
               >
                 {link.label}
               </button>
@@ -46,11 +50,11 @@ const Footer = () => {
           </nav>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-border text-center">
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
-            © {currentYear} Jane Doe. Made with{" "}
-            <Heart className="w-4 h-4 text-destructive fill-destructive" /> All
-            rights reserved.
+        <div className="mt-8 pt-8 border-t border-border/50 text-center">
+          <p className="text-sm text-muted-foreground flex items-center justify-center gap-1 font-mono">
+            © {currentYear} JANE DOE // Made with{" "}
+            <Heart className="w-4 h-4 text-accent fill-accent animate-pulse" />{" "}
+            and <span className="text-primary">{"<code/>"}</span>
           </p>
         </div>
       </div>

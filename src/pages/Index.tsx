@@ -11,14 +11,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Jane Doe | Full Stack Developer & Designer</title>
+        <title>Jane Doe | Full Stack Developer & Creative Technologist</title>
         <meta
           name="description"
-          content="Portfolio of Jane Doe, a full-stack developer specializing in React, TypeScript, and modern web technologies. View my projects and get in touch."
+          content="Futuristic portfolio of Jane Doe, a full-stack developer specializing in React, TypeScript, Three.js and immersive web experiences."
         />
         <meta
           name="keywords"
-          content="web developer, full stack developer, react developer, portfolio, frontend developer"
+          content="web developer, full stack developer, react developer, three.js, 3D web, portfolio"
         />
         <link rel="canonical" href="https://example.com" />
       </Helmet>
