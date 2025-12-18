@@ -1,6 +1,7 @@
 import { Code, Palette, Lightbulb, Heart } from "lucide-react";
 import FloatingElements from "@/components/3d/FloatingElements";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import ParallaxBackground from "@/components/ParallaxBackground";
 
 const AboutSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
@@ -36,6 +37,7 @@ const AboutSection = () => {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
     >
+      <ParallaxBackground variant="about" />
       <FloatingElements variant="about" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">

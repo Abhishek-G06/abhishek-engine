@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import ParallaxBackground from "@/components/ParallaxBackground";
 
 const ContactSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
@@ -70,11 +71,12 @@ const ContactSection = () => {
     <section 
       ref={ref as React.RefObject<HTMLElement>}
       id="contact" 
-      className={`py-20 lg:py-32 transition-all duration-700 ${
+      className={`py-20 lg:py-32 relative overflow-hidden transition-all duration-700 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <ParallaxBackground variant="contact" />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
