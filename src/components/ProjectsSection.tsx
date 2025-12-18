@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Folder } from "lucide-react";
-import FloatingElements from "@/components/3d/FloatingElements";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
@@ -73,7 +72,6 @@ const ProjectsSection = () => {
       }`}
     >
       <ParallaxBackground variant="projects" />
-      <FloatingElements variant="projects" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
