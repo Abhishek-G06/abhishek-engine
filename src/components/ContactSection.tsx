@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-react";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { motion, useInView } from "framer-motion";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
 const ContactSection = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -67,18 +68,44 @@ const ContactSection = () => {
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
   return (
     <section 
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={ref}
       id="contact" 
-      className={`py-20 lg:py-32 relative overflow-hidden transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
+      className="py-20 lg:py-32 relative overflow-hidden"
     >
       <ParallaxBackground variant="contact" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Get in Touch
             </h2>
@@ -87,20 +114,24 @@ const ContactSection = () => {
               Have a project in mind or just want to say hello? I'd love to hear
               from you. Let's create something amazing together!
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact Info */}
-            <div className="lg:col-span-2 space-y-8">
+            <motion.div
+              className="lg:col-span-2 space-y-8"
+              variants={containerVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+            >
               <div className="space-y-6">
-                {contactInfo.map((item, index) => (
-                  <a
+                {contactInfo.map((item) => (
+                  <motion.a
                     key={item.label}
                     href={item.href}
-                    className={`flex items-start gap-4 group transition-all duration-500 ${
-                      isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-                    }`}
-                    style={{ transitionDelay: `${index * 100 + 200}ms` }}
+                    className="flex items-start gap-4 group"
+                    variants={itemVariants}
+                    whileHover={{ x: 4 }}
                   >
                     <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                       <item.icon className="w-5 h-5 text-accent-foreground group-hover:text-primary-foreground" />
@@ -113,40 +144,47 @@ const ContactSection = () => {
                         {item.value}
                       </p>
                     </div>
-                  </a>
+                  </motion.a>
                 ))}
               </div>
 
-              <div className="pt-6 border-t border-border">
+              <motion.div
+                className="pt-6 border-t border-border"
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+              >
                 <p className="text-sm text-muted-foreground mb-4">
                   Follow me on social media
                 </p>
                 <div className="flex gap-3">
                   {socialLinks.map((link, index) => (
-                    <a
+                    <motion.a
                       key={link.label}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500 ${
-                        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                      }`}
-                      style={{ transitionDelay: `${index * 100 + 500}ms` }}
+                      className="p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
                       aria-label={link.label}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                      transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       <link.icon className="w-5 h-5" />
-                    </a>
+                    </motion.a>
                   ))}
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Contact Form */}
-            <div 
-              className={`lg:col-span-3 transition-all duration-700 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: '300ms' }}
+            <motion.div
+              className="lg:col-span-3"
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}
             >
               <form
                 onSubmit={handleSubmit}
@@ -241,7 +279,7 @@ const ContactSection = () => {
                   )}
                 </Button>
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

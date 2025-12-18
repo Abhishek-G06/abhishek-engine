@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Folder } from "lucide-react";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
 const ProjectsSection = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   
   const projects = [
     {
@@ -63,18 +65,44 @@ const ProjectsSection = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
   return (
     <section 
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={ref}
       id="projects" 
-      className={`py-20 lg:py-32 bg-card/50 relative overflow-hidden transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
+      className="py-20 lg:py-32 bg-card/50 relative overflow-hidden"
     >
       <ParallaxBackground variant="projects" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Featured Projects
             </h2>
@@ -83,19 +111,23 @@ const ProjectsSection = () => {
               Here are some of my recent projects that showcase my skills and
               passion for building great products.
             </p>
-          </div>
+          </motion.div>
 
           {/* Featured Projects */}
-          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          <motion.div
+            className="grid lg:grid-cols-2 gap-8 mb-12"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+          >
             {projects
               .filter((p) => p.featured)
-              .map((project, index) => (
-                <div
+              .map((project) => (
+                <motion.div
                   key={project.title}
-                  className={`group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: `${index * 150 + 200}ms` }}
+                  className="group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500"
+                  variants={itemVariants}
+                  whileHover={{ y: -4 }}
                 >
                   <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
                     <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
@@ -144,21 +176,25 @@ const ProjectsSection = () => {
                       </Button>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-          </div>
+          </motion.div>
 
           {/* Other Projects */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+          >
             {projects
               .filter((p) => !p.featured)
-              .map((project, index) => (
-                <div
+              .map((project) => (
+                <motion.div
                   key={project.title}
-                  className={`group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500 ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: `${index * 100 + 600}ms` }}
+                  className="group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500"
+                  variants={itemVariants}
+                  whileHover={{ y: -4 }}
                 >
                   <div className="flex items-center justify-between mb-4">
                     <Folder className="w-10 h-10 text-primary/70" />
@@ -197,9 +233,9 @@ const ProjectsSection = () => {
                       </span>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 import heroAvatar from "@/assets/hero-avatar.png";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
@@ -9,6 +10,56 @@ const HeroSection = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
+  const avatarVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 1,
+        delay: 0.5,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
+  const socialVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        delay: 1 + i * 0.1,
+        ease: "easeOut" as const,
+      },
+    }),
   };
 
   return (
@@ -25,34 +76,42 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
           {/* Text Content */}
-          <div className="flex-1 text-center lg:text-left">
-            <p className="text-primary font-medium mb-4 animate-fade-in opacity-0" style={{ animationDelay: "0.1s" }}>
+          <motion.div
+            className="flex-1 text-center lg:text-left"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.p
+              className="text-primary font-medium mb-4"
+              variants={itemVariants}
+            >
               Hello, I'm
-            </p>
-            <h1
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.2s" }}
+            </motion.p>
+            <motion.h1
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6"
+              variants={itemVariants}
             >
               Jane Doe
-            </h1>
-            <h2
-              className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-serif mb-8 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.3s" }}
+            </motion.h1>
+            <motion.h2
+              className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-serif mb-8"
+              variants={itemVariants}
             >
               Full Stack Developer & Designer
-            </h2>
-            <p
-              className="text-foreground/70 text-lg max-w-lg mx-auto lg:mx-0 mb-10 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.4s" }}
+            </motion.h2>
+            <motion.p
+              className="text-foreground/70 text-lg max-w-lg mx-auto lg:mx-0 mb-10"
+              variants={itemVariants}
             >
               I craft beautiful, functional digital experiences that help
               businesses grow and users smile.
-            </p>
+            </motion.p>
 
             {/* CTA Buttons */}
-            <div
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.5s" }}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
+              variants={itemVariants}
             >
               <Button
                 variant="hero"
@@ -68,42 +127,40 @@ const HeroSection = () => {
               >
                 Contact Me
               </Button>
-            </div>
+            </motion.div>
 
             {/* Social Links */}
-            <div
-              className="flex gap-4 justify-center lg:justify-start animate-fade-in opacity-0"
-              style={{ animationDelay: "0.6s" }}
-            >
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="mailto:hello@example.com"
-                className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
+            <div className="flex gap-4 justify-center lg:justify-start">
+              {[
+                { href: "https://github.com", icon: Github },
+                { href: "https://linkedin.com", icon: Linkedin },
+                { href: "mailto:hello@example.com", icon: Mail },
+              ].map((social, i) => (
+                <motion.a
+                  key={social.href}
+                  href={social.href}
+                  target={social.href.startsWith("mailto") ? undefined : "_blank"}
+                  rel={social.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+                  className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
+                  variants={socialVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={i}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <social.icon className="w-5 h-5" />
+                </motion.a>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Avatar */}
-          <div
-            className="flex-shrink-0 animate-scale-in opacity-0"
-            style={{ animationDelay: "0.3s" }}
+          <motion.div
+            className="flex-shrink-0"
+            variants={avatarVariants}
+            initial="hidden"
+            animate="visible"
           >
             <div className="relative">
               <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
@@ -113,22 +170,35 @@ const HeroSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary rounded-full flex items-center justify-center shadow-lg">
+              <motion.div
+                className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary rounded-full flex items-center justify-center shadow-lg"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.2, duration: 0.5, ease: "easeOut" }}
+              >
                 <span className="text-primary-foreground font-bold text-sm text-center">
                   5+ Years<br />Exp.
                 </span>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Scroll indicator */}
-        <button
+        <motion.button
           onClick={() => scrollToSection("about")}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-muted-foreground hover:text-primary transition-colors"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 0.5 }}
         >
-          <ArrowDown className="w-6 h-6" />
-        </button>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ArrowDown className="w-6 h-6" />
+          </motion.div>
+        </motion.button>
       </div>
     </section>
   );
