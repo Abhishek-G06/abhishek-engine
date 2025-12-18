@@ -34,16 +34,18 @@ const HeroSection = () => {
       const socials = contentRef.current?.querySelector('[data-animate="socials"]');
       
       // Initial state: everything hidden
+      // Content slides in from the right
       const elements = [greeting, name, title, description, buttons, socials];
       gsap.set(elements, { 
         opacity: 0, 
-        y: 10,
+        x: 60,
         visibility: "hidden"
       });
       
+      // Avatar slides in from the left
       gsap.set(avatarRef.current, { 
         opacity: 0, 
-        scale: 0.98,
+        x: -60,
         visibility: "hidden"
       });
       
@@ -60,46 +62,47 @@ const HeroSection = () => {
         }
       });
 
-      // Line-by-line reveal with stagger
+      // Line-by-line reveal with stagger - content slides from right
       tl.to(greeting, {
         opacity: 1,
-        y: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.4,
       })
       .to(name, {
         opacity: 1,
-        y: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2") // Stagger: 0.2s
       .to(title, {
         opacity: 1,
-        y: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(description, {
         opacity: 1,
-        y: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(buttons, {
         opacity: 1,
-        y: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(socials, {
         opacity: 1,
-        y: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
+      // Avatar slides in from left
       .to(avatarRef.current, {
         opacity: 1,
-        scale: 1,
+        x: 0,
         visibility: "visible",
         duration: 1.6,
       }, "-=1.4")
@@ -148,9 +151,9 @@ const HeroSection = () => {
       {/* Subtle gradient overlay for readability */}
       <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-transparent to-background/70 pointer-events-none" style={{ zIndex: 1 }} />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
-          {/* Text Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 overflow-hidden">
+        <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-20">
+          {/* Text Content - Right side on desktop */}
           <div ref={contentRef} className="flex-1 text-center lg:text-left">
             <p 
               data-animate="greeting"
@@ -235,10 +238,10 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Avatar */}
+          {/* Avatar - Left side on desktop */}
           <div
             ref={avatarRef}
-            className="flex-shrink-0"
+            className="flex-shrink-0 lg:order-first"
             style={{ visibility: "hidden" }}
           >
             <div className="relative">
