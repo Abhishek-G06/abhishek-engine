@@ -22,28 +22,28 @@ const SkillsSection = () => {
     {
       title: "Frontend",
       skills: [
-        { name: "React", icon: Code2 },
-        { name: "TypeScript", icon: FileCode },
-        { name: "Tailwind", icon: Palette },
-        { name: "Next.js", icon: Layers },
+        { name: "React", icon: Code2, color: "#61DAFB", glowColor: "rgba(97,218,251,0.6)" },
+        { name: "TypeScript", icon: FileCode, color: "#3178C6", glowColor: "rgba(49,120,198,0.6)" },
+        { name: "Tailwind", icon: Palette, color: "#06B6D4", glowColor: "rgba(6,182,212,0.6)" },
+        { name: "Next.js", icon: Layers, color: "#888888", glowColor: "rgba(150,150,150,0.5)" },
       ],
     },
     {
       title: "Backend",
       skills: [
-        { name: "Node.js", icon: Server },
-        { name: "PostgreSQL", icon: Database },
-        { name: "GraphQL", icon: Share2 },
-        { name: "REST APIs", icon: Globe },
+        { name: "Node.js", icon: Server, color: "#339933", glowColor: "rgba(51,153,51,0.6)" },
+        { name: "PostgreSQL", icon: Database, color: "#4169E1", glowColor: "rgba(65,105,225,0.6)" },
+        { name: "GraphQL", icon: Share2, color: "#E10098", glowColor: "rgba(225,0,152,0.6)" },
+        { name: "REST APIs", icon: Globe, color: "#FF6B6B", glowColor: "rgba(255,107,107,0.6)" },
       ],
     },
     {
       title: "Tools & Others",
       skills: [
-        { name: "Git", icon: GitBranch },
-        { name: "Docker", icon: Container },
-        { name: "Figma", icon: PenTool },
-        { name: "CI/CD", icon: Workflow },
+        { name: "Git", icon: GitBranch, color: "#F05032", glowColor: "rgba(240,80,50,0.6)" },
+        { name: "Docker", icon: Container, color: "#2496ED", glowColor: "rgba(36,150,237,0.6)" },
+        { name: "Figma", icon: PenTool, color: "#F24E1E", glowColor: "rgba(242,78,30,0.6)" },
+        { name: "CI/CD", icon: Workflow, color: "#4CAF50", glowColor: "rgba(76,175,80,0.6)" },
       ],
     },
   ];
@@ -93,11 +93,21 @@ const SkillsSection = () => {
                       <div 
                         key={skill.name}
                         className={`group flex flex-col items-center gap-2 px-4 py-3 rounded-xl
-                          hover:bg-primary/10 transition-all duration-300 cursor-default
+                          transition-all duration-300 cursor-default
                           ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
                         style={{ transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 400}ms` }}
                       >
-                        <IconComponent className="w-8 h-8 text-primary transition-transform duration-300 group-hover:animate-float" />
+                        <div 
+                          className="p-2 rounded-lg transition-all duration-300 group-hover:scale-110"
+                          style={{ 
+                            '--glow-color': skill.glowColor 
+                          } as React.CSSProperties}
+                        >
+                          <IconComponent 
+                            className="w-8 h-8 transition-all duration-300 group-hover:animate-float group-hover:drop-shadow-[0_0_12px_var(--glow-color)]" 
+                            style={{ color: skill.color }}
+                          />
+                        </div>
                         <span className="text-sm text-foreground/80 font-medium">
                           {skill.name}
                         </span>
