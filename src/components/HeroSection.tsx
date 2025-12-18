@@ -14,7 +14,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background pt-20"
     >
       {/* Parallax Background */}
       <ParallaxBackground variant="hero" />
