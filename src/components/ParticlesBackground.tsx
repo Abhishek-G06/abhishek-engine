@@ -17,9 +17,21 @@ interface Particle {
   trail: TrailPoint[];
 }
 
+interface BurstParticle {
+  x: number;
+  y: number;
+  size: number;
+  speedX: number;
+  speedY: number;
+  opacity: number;
+  life: number;
+  maxLife: number;
+}
+
 const ParticlesBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
+  const burstParticlesRef = useRef<BurstParticle[]>([]);
   const animationRef = useRef<number>();
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const timeRef = useRef(0);
@@ -144,11 +156,38 @@ const ParticlesBackground = () => {
         ctx.shadowBlur = 0;
       });
 
+      // Draw and update burst particles
+      const [hBase, sBase, lBase] = primaryHsl.split(' ').map((v) => parseFloat(v));
+      burstParticlesRef.current = burstParticlesRef.current.filter((bp) => {
+        bp.life -= 1;
+        if (bp.life <= 0) return false;
+
+        bp.x += bp.speedX;
+        bp.y += bp.speedY;
+        bp.speedX *= 0.98;
+        bp.speedY *= 0.98;
+        bp.speedY += 0.05; // slight gravity
+
+        const lifeRatio = bp.life / bp.maxLife;
+        const burstHue = ((hBase + Math.sin(timeRef.current) * 20) % 360 + 360) % 360;
+        const burstColor = `${burstHue} ${sBase}% ${lBase}%`;
+
+        ctx.shadowBlur = 10 * lifeRatio;
+        ctx.shadowColor = `hsl(${burstColor} / ${bp.opacity * lifeRatio})`;
+
+        ctx.beginPath();
+        ctx.arc(bp.x, bp.y, bp.size * lifeRatio, 0, Math.PI * 2);
+        ctx.fillStyle = `hsl(${burstColor} / ${bp.opacity * lifeRatio})`;
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+        return true;
+      });
+
       // Draw connections between nearby particles with color shift
-      const [h, s, l] = primaryHsl.split(' ').map((v) => parseFloat(v));
       const lineHueShift = Math.sin(timeRef.current * 0.3) * 15;
-      const lineHue = ((h + lineHueShift) % 360 + 360) % 360;
-      const lineColor = `${lineHue} ${s}% ${l}%`;
+      const lineHue = ((hBase + lineHueShift) % 360 + 360) % 360;
+      const lineColor = `${lineHue} ${sBase}% ${lBase}%`;
 
       particlesRef.current.forEach((particle, i) => {
         particlesRef.current.slice(i + 1).forEach((otherParticle) => {
@@ -178,6 +217,24 @@ const ParticlesBackground = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
+    const handleClick = (e: MouseEvent) => {
+      const burstCount = 20;
+      for (let i = 0; i < burstCount; i++) {
+        const angle = (Math.PI * 2 * i) / burstCount + Math.random() * 0.3;
+        const speed = 3 + Math.random() * 4;
+        burstParticlesRef.current.push({
+          x: e.clientX,
+          y: e.clientY,
+          size: 2 + Math.random() * 3,
+          speedX: Math.cos(angle) * speed,
+          speedY: Math.sin(angle) * speed,
+          opacity: 0.6 + Math.random() * 0.4,
+          life: 40 + Math.random() * 20,
+          maxLife: 60,
+        });
+      }
+    };
+
     resizeCanvas();
     createParticles();
     animate();
@@ -188,6 +245,7 @@ const ParticlesBackground = () => {
     });
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('click', handleClick);
 
     return () => {
       if (animationRef.current) {
@@ -196,6 +254,7 @@ const ParticlesBackground = () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('click', handleClick);
     };
   }, []);
 
