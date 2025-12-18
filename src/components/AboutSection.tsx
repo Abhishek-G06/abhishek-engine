@@ -75,8 +75,10 @@ const AboutSection = () => {
               {highlights.map((item, index) => (
                 <div
                   key={item.title}
-                  className="p-6 bg-card rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-border/50"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  className={`p-6 bg-card rounded-xl shadow-sm hover:shadow-lg transition-all duration-500 hover:-translate-y-1 border border-border/50 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${index * 100 + 200}ms` }}
                 >
                   <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-accent-foreground" />

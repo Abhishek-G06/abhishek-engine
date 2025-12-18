@@ -60,14 +60,23 @@ const SkillsSection = () => {
             {skillCategories.map((category, categoryIndex) => (
               <div
                 key={category.title}
-                className="bg-card p-8 rounded-2xl shadow-sm border border-border/50 hover:shadow-lg transition-shadow duration-300"
+                className={`bg-card p-8 rounded-2xl shadow-sm border border-border/50 hover:shadow-lg transition-all duration-500 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: `${categoryIndex * 150 + 200}ms` }}
               >
                 <h3 className="text-xl font-semibold text-foreground mb-6">
                   {category.title}
                 </h3>
                 <div className="space-y-5">
                   {category.skills.map((skill, skillIndex) => (
-                    <div key={skill.name}>
+                    <div 
+                      key={skill.name}
+                      className={`transition-all duration-500 ${
+                        isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
+                      }`}
+                      style={{ transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 400}ms` }}
+                    >
                       <div className="flex justify-between mb-2">
                         <span className="text-foreground/80 font-medium">
                           {skill.name}
@@ -78,10 +87,12 @@ const SkillsSection = () => {
                       </div>
                       <div className="h-2 bg-muted/50 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-1000 ease-out"
+                          className={`h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-1000 ease-out ${
+                            isVisible ? '' : 'w-0'
+                          }`}
                           style={{
-                            width: `${skill.level}%`,
-                            animationDelay: `${categoryIndex * 0.2 + skillIndex * 0.1}s`,
+                            width: isVisible ? `${skill.level}%` : '0%',
+                            transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 600}ms`,
                           }}
                         />
                       </div>
