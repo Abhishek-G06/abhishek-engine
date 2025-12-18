@@ -1,7 +1,10 @@
 import { Code, Palette, Lightbulb, Heart } from "lucide-react";
 import FloatingElements from "@/components/3d/FloatingElements";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const AboutSection = () => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  
   const highlights = [
     {
       icon: Code,
@@ -26,7 +29,13 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="py-20 lg:py-32 bg-card/50 relative overflow-hidden">
+    <section 
+      ref={ref as React.RefObject<HTMLElement>}
+      id="about" 
+      className={`py-20 lg:py-32 bg-card/50 relative overflow-hidden transition-all duration-700 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+    >
       <FloatingElements variant="about" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
