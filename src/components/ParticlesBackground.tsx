@@ -106,9 +106,9 @@ const ParticlesBackground = () => {
           point.x, point.y, 0,
           point.x, point.y, size
         );
-        gradient.addColorStop(0, `hsla(${primaryHsl}, ${opacity})`);
-        gradient.addColorStop(0.4, `hsla(${primaryHsl}, ${opacity * 0.6})`);
-        gradient.addColorStop(1, `hsla(${primaryHsl}, 0)`);
+        gradient.addColorStop(0, `hsl(${primaryHsl} / ${opacity})`);
+        gradient.addColorStop(0.4, `hsl(${primaryHsl} / ${opacity * 0.6})`);
+        gradient.addColorStop(1, `hsl(${primaryHsl} / 0)`);
         
         ctx.beginPath();
         ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
@@ -148,7 +148,7 @@ const ParticlesBackground = () => {
         const glowIntensity = distance < interactionRadius ? 1 + (1 - distance / interactionRadius) * 0.5 : 1;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size * glowIntensity, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${primaryHsl}, ${particle.opacity * glowIntensity})`;
+        ctx.fillStyle = `hsl(${primaryHsl} / ${particle.opacity * glowIntensity})`;
         ctx.fill();
       });
 
@@ -163,7 +163,7 @@ const ParticlesBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `hsla(${primaryHsl}, ${0.15 * (1 - distance / 150)})`;
+            ctx.strokeStyle = `hsl(${primaryHsl} / ${0.15 * (1 - distance / 150)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
