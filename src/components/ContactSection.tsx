@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, MapPin, Send, Github, Linkedin, Twitter, Zap } from "lucide-react";
+import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-react";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -25,11 +25,12 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast({
-      title: "Transmission Successful",
-      description: "Your message has been received. I'll respond shortly.",
+      title: "Message sent!",
+      description: "Thanks for reaching out. I'll get back to you soon!",
     });
 
     setFormData({ name: "", email: "", subject: "", message: "" });
@@ -39,15 +40,21 @@ const ContactSection = () => {
   const contactInfo = [
     {
       icon: Mail,
-      label: "EMAIL",
+      label: "Email",
       value: "hello@example.com",
       href: "mailto:hello@example.com",
     },
     {
       icon: MapPin,
-      label: "LOCATION",
+      label: "Location",
       value: "San Francisco, CA",
       href: "#",
+    },
+    {
+      icon: Phone,
+      label: "Phone",
+      value: "+1 (555) 123-4567",
+      href: "tel:+15551234567",
     },
   ];
 
@@ -58,26 +65,17 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-24 lg:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-30" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="contact" className="py-20 lg:py-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-primary font-mono text-sm tracking-wider mb-4">
-              {"// INIT_CONTACT"}
-            </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6">
-              GET IN <span className="text-primary text-glow-cyan">TOUCH</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Get in Touch
             </h2>
-            <div className="flex items-center justify-center gap-4">
-              <div className="h-px w-24 bg-gradient-to-r from-transparent to-primary" />
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <div className="h-px w-24 bg-gradient-to-l from-transparent to-primary" />
-            </div>
-            <p className="text-muted-foreground mt-6 max-w-2xl mx-auto">
-              Ready to build something extraordinary? Let's connect and create the future together.
+            <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Have a project in mind or just want to say hello? I'd love to hear
+              from you. Let's create something amazing together!
             </p>
           </div>
 
@@ -91,11 +89,11 @@ const ContactSection = () => {
                     href={item.href}
                     className="flex items-start gap-4 group"
                   >
-                    <div className="w-12 h-12 glass rounded-lg flex items-center justify-center flex-shrink-0 neon-border group-hover:border-primary/50 transition-all">
-                      <item.icon className="w-5 h-5 text-primary" />
+                    <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                      <item.icon className="w-5 h-5 text-accent-foreground group-hover:text-primary-foreground" />
                     </div>
                     <div>
-                      <p className="text-xs font-mono text-muted-foreground tracking-wider">
+                      <p className="text-sm text-muted-foreground">
                         {item.label}
                       </p>
                       <p className="text-foreground font-medium group-hover:text-primary transition-colors">
@@ -106,9 +104,9 @@ const ContactSection = () => {
                 ))}
               </div>
 
-              <div className="glass rounded-xl p-6 neon-border">
-                <p className="text-xs font-mono text-muted-foreground mb-4 tracking-wider">
-                  // SOCIAL_LINKS
+              <div className="pt-6 border-t border-border">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Follow me on social media
                 </p>
                 <div className="flex gap-3">
                   {socialLinks.map((link) => (
@@ -117,25 +115,12 @@ const ContactSection = () => {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 rounded-lg glass neon-border hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
+                      className="p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
                       aria-label={link.label}
                     >
-                      <link.icon className="w-5 h-5 text-muted-foreground hover:text-primary" />
+                      <link.icon className="w-5 h-5" />
                     </a>
                   ))}
-                </div>
-              </div>
-
-              {/* Status indicator */}
-              <div className="glass rounded-xl p-6 neon-border">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                    <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
-                  </div>
-                  <span className="text-sm text-muted-foreground font-mono">
-                    Available for new projects
-                  </span>
                 </div>
               </div>
             </div>
@@ -144,22 +129,15 @@ const ContactSection = () => {
             <div className="lg:col-span-3">
               <form
                 onSubmit={handleSubmit}
-                className="glass rounded-2xl p-8 neon-border"
+                className="bg-card p-8 rounded-2xl shadow-sm border border-border/50"
               >
-                <div className="flex items-center gap-2 mb-6">
-                  <Zap className="w-5 h-5 text-primary" />
-                  <span className="font-mono text-sm text-muted-foreground">
-                    // SEND_MESSAGE
-                  </span>
-                </div>
-
                 <div className="grid sm:grid-cols-2 gap-6 mb-6">
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-xs font-mono text-muted-foreground mb-2 tracking-wider"
+                      className="block text-sm font-medium text-foreground mb-2"
                     >
-                      NAME
+                      Your Name
                     </label>
                     <Input
                       id="name"
@@ -168,15 +146,15 @@ const ContactSection = () => {
                       onChange={handleChange}
                       placeholder="John Doe"
                       required
-                      className="bg-background/50 border-border/50 focus:border-primary"
+                      className="bg-background"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs font-mono text-muted-foreground mb-2 tracking-wider"
+                      className="block text-sm font-medium text-foreground mb-2"
                     >
-                      EMAIL
+                      Email Address
                     </label>
                     <Input
                       id="email"
@@ -186,33 +164,33 @@ const ContactSection = () => {
                       onChange={handleChange}
                       placeholder="john@example.com"
                       required
-                      className="bg-background/50 border-border/50 focus:border-primary"
+                      className="bg-background"
                     />
                   </div>
                 </div>
                 <div className="mb-6">
                   <label
                     htmlFor="subject"
-                    className="block text-xs font-mono text-muted-foreground mb-2 tracking-wider"
+                    className="block text-sm font-medium text-foreground mb-2"
                   >
-                    SUBJECT
+                    Subject
                   </label>
                   <Input
                     id="subject"
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    placeholder="Project Inquiry"
+                    placeholder="How can I help you?"
                     required
-                    className="bg-background/50 border-border/50 focus:border-primary"
+                    className="bg-background"
                   />
                 </div>
                 <div className="mb-6">
                   <label
                     htmlFor="message"
-                    className="block text-xs font-mono text-muted-foreground mb-2 tracking-wider"
+                    className="block text-sm font-medium text-foreground mb-2"
                   >
-                    MESSAGE
+                    Message
                   </label>
                   <Textarea
                     id="message"
@@ -222,25 +200,22 @@ const ContactSection = () => {
                     placeholder="Tell me about your project..."
                     rows={5}
                     required
-                    className="bg-background/50 border-border/50 focus:border-primary resize-none"
+                    className="bg-background resize-none"
                   />
                 </div>
                 <Button
                   type="submit"
                   variant="hero"
                   size="lg"
-                  className="w-full font-display"
+                  className="w-full"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      TRANSMITTING...
-                    </span>
+                    "Sending..."
                   ) : (
                     <>
                       <Send className="w-4 h-4 mr-2" />
-                      SEND TRANSMISSION
+                      Send Message
                     </>
                   )}
                 </Button>

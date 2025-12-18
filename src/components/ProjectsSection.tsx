@@ -1,58 +1,58 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, Folder, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Github, Folder } from "lucide-react";
 
 const ProjectsSection = () => {
   const projects = [
     {
-      title: "NEURAL COMMERCE",
+      title: "E-Commerce Platform",
       description:
-        "AI-powered e-commerce platform with predictive analytics, personalized recommendations, and seamless checkout experience.",
-      tags: ["React", "Node.js", "AI/ML", "Stripe"],
+        "A full-featured online store with cart, checkout, and payment integration. Built with React, Node.js, and Stripe.",
+      tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
       liveUrl: "#",
       githubUrl: "#",
       featured: true,
     },
     {
-      title: "QUANTUM TASKS",
+      title: "Task Management App",
       description:
-        "Real-time collaborative project management with WebSocket sync, drag-and-drop interfaces, and team analytics.",
+        "A collaborative project management tool with real-time updates, drag-and-drop, and team features.",
       tags: ["Next.js", "TypeScript", "Prisma", "WebSocket"],
       liveUrl: "#",
       githubUrl: "#",
       featured: true,
     },
     {
-      title: "SYNTHWAVE AI",
+      title: "AI Content Generator",
       description:
-        "AI content generation platform using GPT-4 for marketing copy, blog posts, and creative writing.",
-      tags: ["React", "OpenAI", "Tailwind", "Edge Functions"],
+        "An AI-powered tool that helps create marketing copy, blog posts, and social media content.",
+      tags: ["React", "OpenAI", "Tailwind", "Vercel"],
       liveUrl: "#",
       githubUrl: "#",
       featured: true,
     },
     {
-      title: "CYBER PORTFOLIO",
+      title: "Portfolio Template",
       description:
-        "Futuristic 3D portfolio template with Three.js animations and interactive elements.",
-      tags: ["React", "Three.js", "GSAP"],
+        "A customizable portfolio template for developers and designers with dark mode support.",
+      tags: ["React", "Tailwind CSS", "Framer Motion"],
       liveUrl: "#",
       githubUrl: "#",
       featured: false,
     },
     {
-      title: "WEATHER MATRIX",
+      title: "Weather Dashboard",
       description:
-        "Immersive weather visualization with 3D globe, real-time data, and predictive forecasting.",
-      tags: ["Vue.js", "WebGL", "Weather API"],
+        "A beautiful weather app with 7-day forecasts, location search, and weather alerts.",
+      tags: ["Vue.js", "Weather API", "Charts"],
       liveUrl: "#",
       githubUrl: "#",
       featured: false,
     },
     {
-      title: "BIOMETRIC TRACKER",
+      title: "Fitness Tracker",
       description:
-        "Comprehensive fitness tracking with wearable integration and data visualization.",
-      tags: ["React Native", "Firebase", "HealthKit"],
+        "Track workouts, set goals, and monitor progress with this comprehensive fitness companion.",
+      tags: ["React Native", "Firebase", "Charts"],
       liveUrl: "#",
       githubUrl: "#",
       featured: false,
@@ -60,106 +60,91 @@ const ProjectsSection = () => {
   ];
 
   return (
-    <section id="projects" className="py-24 lg:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-30" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="projects" className="py-20 lg:py-32 bg-card/50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-accent font-mono text-sm tracking-wider mb-4">
-              {"// FEATURED_WORK"}
-            </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6">
-              MY <span className="text-accent text-glow-pink">PROJECTS</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Featured Projects
             </h2>
-            <div className="flex items-center justify-center gap-4">
-              <div className="h-px w-24 bg-gradient-to-r from-transparent to-accent" />
-              <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <div className="h-px w-24 bg-gradient-to-l from-transparent to-accent" />
-            </div>
+            <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Here are some of my recent projects that showcase my skills and
+              passion for building great products.
+            </p>
           </div>
 
           {/* Featured Projects */}
-          <div className="grid lg:grid-cols-2 gap-6 mb-12">
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
             {projects
               .filter((p) => p.featured)
               .map((project, index) => (
                 <div
                   key={project.title}
-                  className="group glass rounded-2xl overflow-hidden neon-border hover:border-primary/50 transition-all duration-500"
+                  className="group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="h-48 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-grid opacity-50" />
-                    <Folder className="w-20 h-20 text-primary/40 group-hover:scale-110 group-hover:text-primary/60 transition-all duration-500" />
-                    <div className="absolute top-4 right-4 flex gap-2">
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg glass hover:bg-primary/20 transition-colors"
-                      >
-                        <Github className="w-4 h-4" />
-                      </a>
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg glass hover:bg-primary/20 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
+                  <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
+                    <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-display font-semibold text-foreground mb-3 tracking-wider group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-semibold text-foreground mb-3">
                       {project.title}
                     </h3>
-                    <p className="text-muted-foreground mb-4 text-sm line-clamp-2">
+                    <p className="text-muted-foreground mb-4 line-clamp-2">
                       {project.description}
                     </p>
                     <div className="flex flex-wrap gap-2 mb-5">
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 bg-primary/10 text-primary text-xs font-mono rounded-full border border-primary/20"
+                          className="px-3 py-1 bg-accent text-accent-foreground text-xs font-medium rounded-full"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <Button
-                      variant="heroOutline"
-                      size="sm"
-                      className="w-full font-display"
-                      asChild
-                    >
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <div className="flex gap-3">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        asChild
+                        className="flex-1"
                       >
-                        VIEW PROJECT
-                        <ArrowUpRight className="w-4 h-4 ml-2" />
-                      </a>
-                    </Button>
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Live Demo
+                        </a>
+                      </Button>
+                      <Button variant="outline" size="sm" asChild>
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Github className="w-4 h-4" />
+                        </a>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
           </div>
 
           {/* Other Projects */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects
               .filter((p) => !p.featured)
               .map((project) => (
                 <div
                   key={project.title}
-                  className="group glass p-6 rounded-xl neon-border hover:border-primary/30 transition-all duration-300"
+                  className="group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <Folder className="w-10 h-10 text-primary/50 group-hover:text-primary transition-colors" />
+                    <Folder className="w-10 h-10 text-primary/70" />
                     <div className="flex gap-2">
                       <a
                         href={project.githubUrl}
@@ -179,7 +164,7 @@ const ProjectsSection = () => {
                       </a>
                     </div>
                   </div>
-                  <h3 className="font-display font-semibold text-foreground mb-2 tracking-wider group-hover:text-primary transition-colors">
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4 line-clamp-2">

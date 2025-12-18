@@ -1,110 +1,76 @@
-import { Code2, Palette, Lightbulb, Cpu } from "lucide-react";
+import { Code, Palette, Lightbulb, Heart } from "lucide-react";
 
 const AboutSection = () => {
   const highlights = [
     {
-      icon: Code2,
-      title: "CLEAN CODE",
-      description: "Writing maintainable, scalable architectures",
-      color: "primary",
+      icon: Code,
+      title: "Clean Code",
+      description: "Writing maintainable, scalable code is my passion",
     },
     {
       icon: Palette,
-      title: "UI/UX DESIGN",
-      description: "Creating stunning visual experiences",
-      color: "secondary",
+      title: "Design Focus",
+      description: "Creating visually stunning user interfaces",
     },
     {
       icon: Lightbulb,
-      title: "INNOVATION",
-      description: "Turning ideas into digital reality",
-      color: "accent",
+      title: "Problem Solver",
+      description: "Turning complex challenges into elegant solutions",
     },
     {
-      icon: Cpu,
-      title: "PERFORMANCE",
-      description: "Optimized for maximum efficiency",
-      color: "primary",
+      icon: Heart,
+      title: "User-Centric",
+      description: "Building experiences people love to use",
     },
   ];
 
   return (
-    <section id="about" className="py-24 lg:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid opacity-30" />
-      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="about" className="py-20 lg:py-32 bg-card/50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-primary font-mono text-sm tracking-wider mb-4">
-              {"// ABOUT_ME"}
-            </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6">
-              WHO <span className="text-primary text-glow-cyan">AM I</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              About Me
             </h2>
-            <div className="flex items-center justify-center gap-4">
-              <div className="h-px w-24 bg-gradient-to-r from-transparent to-primary" />
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <div className="h-px w-24 bg-gradient-to-l from-transparent to-primary" />
-            </div>
+            <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Text Content */}
             <div className="space-y-6">
-              <div className="glass rounded-2xl p-8 neon-border">
-                <p className="text-lg text-foreground/90 leading-relaxed mb-6">
-                  I'm a <span className="text-primary font-semibold">full-stack developer</span> with 
-                  over 5 years of experience creating digital products that push the boundaries of 
-                  what's possible on the web.
-                </p>
-                <p className="text-lg text-foreground/90 leading-relaxed mb-6">
-                  My journey began with curiosity and evolved into a passion for crafting 
-                  <span className="text-secondary"> next-generation</span> user experiences using 
-                  cutting-edge technologies.
-                </p>
-                <p className="text-lg text-foreground/90 leading-relaxed">
-                  I specialize in <span className="text-primary">React</span>, 
-                  <span className="text-secondary"> TypeScript</span>, 
-                  <span className="text-accent"> Three.js</span>, and modern web frameworks.
-                </p>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-4">
-                {[
-                  { value: "5+", label: "YEARS" },
-                  { value: "50+", label: "PROJECTS" },
-                  { value: "30+", label: "CLIENTS" },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="glass rounded-xl p-4 text-center neon-border"
-                  >
-                    <div className="text-3xl font-display font-bold text-primary text-glow-cyan">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs font-mono text-muted-foreground tracking-wider">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <p className="text-lg text-foreground/80 leading-relaxed">
+                I'm a passionate full-stack developer with over 5 years of
+                experience creating digital products that make a difference. My
+                journey in tech started with a curiosity about how things work,
+                and it has evolved into a career dedicated to crafting
+                exceptional user experiences.
+              </p>
+              <p className="text-lg text-foreground/80 leading-relaxed">
+                When I'm not coding, you'll find me exploring new technologies,
+                contributing to open-source projects, or sharing knowledge with
+                the developer community. I believe in continuous learning and
+                pushing the boundaries of what's possible on the web.
+              </p>
+              <p className="text-lg text-foreground/80 leading-relaxed">
+                I specialize in React, TypeScript, Node.js, and modern CSS
+                frameworks. I'm always excited to take on new challenges and
+                collaborate with teams that share my passion for quality and
+                innovation.
+              </p>
             </div>
 
             {/* Highlights Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               {highlights.map((item, index) => (
                 <div
                   key={item.title}
-                  className="glass rounded-xl p-6 neon-border hover:border-primary/50 transition-all duration-300 group"
+                  className="p-6 bg-card rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-border/50"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className={`w-12 h-12 rounded-lg bg-${item.color}/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <item.icon className={`w-6 h-6 text-${item.color}`} />
+                  <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center mb-4">
+                    <item.icon className="w-6 h-6 text-accent-foreground" />
                   </div>
-                  <h3 className="font-display font-semibold text-foreground mb-2 text-sm tracking-wider">
+                  <h3 className="font-semibold text-foreground mb-2">
                     {item.title}
                   </h3>
                   <p className="text-sm text-muted-foreground">

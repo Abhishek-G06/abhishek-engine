@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,17 +23,17 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { label: "ABOUT", id: "about" },
-    { label: "SKILLS", id: "skills" },
-    { label: "PROJECTS", id: "projects" },
-    { label: "CONTACT", id: "contact" },
+    { label: "About", id: "about" },
+    { label: "Skills", id: "skills" },
+    { label: "Projects", id: "projects" },
+    { label: "Contact", id: "contact" },
   ];
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "glass border-b border-primary/20"
+          ? "bg-card/95 backdrop-blur-md shadow-lg"
           : "bg-transparent"
       }`}
     >
@@ -41,11 +41,9 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <button
             onClick={() => scrollToSection("hero")}
-            className="flex items-center gap-2 text-xl font-display font-bold text-foreground hover:text-primary transition-colors"
+            className="text-xl lg:text-2xl font-bold text-foreground hover:text-primary transition-colors"
           >
-            <Zap className="w-6 h-6 text-primary" />
-            <span className="text-glow-cyan">PORT</span>
-            <span className="text-secondary">FOLIO</span>
+            Portfolio
           </button>
 
           {/* Desktop Navigation */}
@@ -55,7 +53,7 @@ const Navbar = () => {
                 key={link.id}
                 variant="ghost"
                 onClick={() => scrollToSection(link.id)}
-                className="text-muted-foreground hover:text-primary font-display text-sm tracking-wider"
+                className="text-foreground/80 hover:text-foreground"
               >
                 {link.label}
               </Button>
@@ -64,9 +62,9 @@ const Navbar = () => {
               variant="hero"
               size="sm"
               onClick={() => scrollToSection("contact")}
-              className="ml-4 font-display"
+              className="ml-2"
             >
-              CONNECT
+              Get in Touch
             </Button>
           </div>
 
@@ -74,7 +72,7 @@ const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-primary"
+            className="md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X /> : <Menu />}
@@ -83,23 +81,23 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden glass border-t border-primary/20 animate-fade-in">
-            <div className="px-4 py-6 space-y-2">
+          <div className="md:hidden bg-card/95 backdrop-blur-md border-t border-border animate-fade-in">
+            <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
-                  className="block w-full text-left px-4 py-3 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all font-display tracking-wider"
+                  className="block w-full text-left px-4 py-3 text-foreground/80 hover:text-foreground hover:bg-accent rounded-lg transition-colors"
                 >
                   {link.label}
                 </button>
               ))}
               <Button
                 variant="hero"
-                className="w-full mt-4 font-display"
+                className="w-full mt-4"
                 onClick={() => scrollToSection("contact")}
               >
-                CONNECT
+                Get in Touch
               </Button>
             </div>
           </div>
