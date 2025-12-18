@@ -33,19 +33,24 @@ const HeroSection = () => {
       const buttons = contentRef.current?.querySelector('[data-animate="buttons"]');
       const socials = contentRef.current?.querySelector('[data-animate="socials"]');
       
+      // Check if mobile for different animation directions
+      const isMobile = window.innerWidth < 1024;
+      
       // Initial state: everything hidden
-      // Content slides in from the right
+      // Content slides in from the right (desktop) or bottom (mobile)
       const elements = [greeting, name, title, description, buttons, socials];
       gsap.set(elements, { 
         opacity: 0, 
-        x: 60,
+        x: isMobile ? 0 : 100,
+        y: isMobile ? 40 : 0,
         visibility: "hidden"
       });
       
-      // Avatar slides in from the left
+      // Avatar slides in from the left (desktop) or top (mobile)
       gsap.set(avatarRef.current, { 
         opacity: 0, 
-        x: -60,
+        x: isMobile ? 0 : -100,
+        y: isMobile ? -40 : 0,
         visibility: "hidden"
       });
       
@@ -62,47 +67,54 @@ const HeroSection = () => {
         }
       });
 
-      // Line-by-line reveal with stagger - content slides from right
+      // Line-by-line reveal with stagger - content slides from right/bottom
       tl.to(greeting, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.4,
       })
       .to(name, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2") // Stagger: 0.2s
       .to(title, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(description, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(buttons, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(socials, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
-      // Avatar slides in from left
+      // Avatar slides in from left/top
       .to(avatarRef.current, {
         opacity: 1,
         x: 0,
+        y: 0,
         visibility: "visible",
         duration: 1.6,
       }, "-=1.4")
