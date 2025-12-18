@@ -11,19 +11,11 @@ interface Particle {
   opacity: number;
 }
 
-interface TrailPoint {
-  x: number;
-  y: number;
-  age: number;
-}
-
 const ParticlesBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const trailRef = useRef<TrailPoint[]>([]);
   const animationRef = useRef<number>();
   const mouseRef = useRef({ x: -1000, y: -1000 });
-  const prevMouseRef = useRef({ x: -1000, y: -1000 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -63,58 +55,7 @@ const ParticlesBackground = () => {
       const computedStyle = getComputedStyle(document.documentElement);
       const primaryHsl = computedStyle.getPropertyValue('--primary').trim();
       const mouse = mouseRef.current;
-      const prevMouse = prevMouseRef.current;
       const interactionRadius = 120;
-
-      // Add new trail points when mouse moves
-      if (mouse.x > 0 && mouse.y > 0 && prevMouse.x > 0) {
-        const dx = mouse.x - prevMouse.x;
-        const dy = mouse.y - prevMouse.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance > 3) {
-          // Add points along the movement path for smooth trail
-          const steps = Math.min(Math.ceil(distance / 3), 15);
-          for (let i = 0; i < steps; i++) {
-            const t = i / steps;
-            trailRef.current.push({
-              x: prevMouse.x + dx * t,
-              y: prevMouse.y + dy * t,
-              age: 0,
-            });
-          }
-          prevMouseRef.current = { ...mouse };
-        }
-      } else if (mouse.x > 0 && mouse.y > 0) {
-        prevMouseRef.current = { ...mouse };
-      }
-
-      // Update and draw trail
-      const maxTrailAge = 50;
-      trailRef.current = trailRef.current.filter(point => {
-        point.age++;
-        return point.age < maxTrailAge;
-      });
-
-      // Draw trail with gradient glow effect
-      trailRef.current.forEach((point) => {
-        const lifeRatio = 1 - point.age / maxTrailAge;
-        const size = 30 * lifeRatio;
-        const opacity = lifeRatio * 0.4;
-        
-        const gradient = ctx.createRadialGradient(
-          point.x, point.y, 0,
-          point.x, point.y, size
-        );
-        gradient.addColorStop(0, `hsl(${primaryHsl} / ${opacity})`);
-        gradient.addColorStop(0.4, `hsl(${primaryHsl} / ${opacity * 0.6})`);
-        gradient.addColorStop(1, `hsl(${primaryHsl} / 0)`);
-        
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-      });
       
       particlesRef.current.forEach((particle) => {
         // Calculate distance from mouse
@@ -179,7 +120,6 @@ const ParticlesBackground = () => {
 
     const handleMouseLeave = () => {
       mouseRef.current = { x: -1000, y: -1000 };
-      prevMouseRef.current = { x: -1000, y: -1000 };
     };
 
     resizeCanvas();
