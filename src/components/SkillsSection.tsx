@@ -1,5 +1,19 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import ParallaxBackground from "@/components/ParallaxBackground";
+import { 
+  Code2, 
+  FileCode, 
+  Palette, 
+  Layers,
+  Server, 
+  Database, 
+  Share2, 
+  Globe,
+  GitBranch, 
+  Container, 
+  PenTool, 
+  Workflow
+} from "lucide-react";
 
 const SkillsSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
@@ -8,28 +22,28 @@ const SkillsSection = () => {
     {
       title: "Frontend",
       skills: [
-        { name: "React", level: 95 },
-        { name: "TypeScript", level: 90 },
-        { name: "Tailwind CSS", level: 92 },
-        { name: "Next.js", level: 85 },
+        { name: "React", icon: Code2 },
+        { name: "TypeScript", icon: FileCode },
+        { name: "Tailwind", icon: Palette },
+        { name: "Next.js", icon: Layers },
       ],
     },
     {
       title: "Backend",
       skills: [
-        { name: "Node.js", level: 88 },
-        { name: "PostgreSQL", level: 82 },
-        { name: "GraphQL", level: 78 },
-        { name: "REST APIs", level: 90 },
+        { name: "Node.js", icon: Server },
+        { name: "PostgreSQL", icon: Database },
+        { name: "GraphQL", icon: Share2 },
+        { name: "REST APIs", icon: Globe },
       ],
     },
     {
       title: "Tools & Others",
       skills: [
-        { name: "Git", level: 92 },
-        { name: "Docker", level: 75 },
-        { name: "Figma", level: 85 },
-        { name: "CI/CD", level: 80 },
+        { name: "Git", icon: GitBranch },
+        { name: "Docker", icon: Container },
+        { name: "Figma", icon: PenTool },
+        { name: "CI/CD", icon: Workflow },
       ],
     },
   ];
@@ -56,11 +70,11 @@ const SkillsSection = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-12">
             {skillCategories.map((category, categoryIndex) => (
               <div
                 key={category.title}
-                className={`bg-card p-8 rounded-2xl shadow-sm border border-border/50 hover:shadow-lg transition-all duration-500 ${
+                className={`text-center transition-all duration-500 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ transitionDelay: `${categoryIndex * 150 + 200}ms` }}
@@ -68,36 +82,28 @@ const SkillsSection = () => {
                 <h3 className="text-xl font-semibold text-foreground mb-6">
                   {category.title}
                 </h3>
-                <div className="space-y-5">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div 
-                      key={skill.name}
-                      className={`transition-all duration-500 ${
-                        isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
-                      }`}
-                      style={{ transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 400}ms` }}
-                    >
-                      <div className="flex justify-between mb-2">
-                        <span className="text-foreground/80 font-medium">
+                <div 
+                  className="inline-flex flex-wrap justify-center gap-6 px-8 py-6 rounded-2xl 
+                    bg-background/20 backdrop-blur-md border border-border/30 
+                    shadow-lg"
+                >
+                  {category.skills.map((skill, skillIndex) => {
+                    const IconComponent = skill.icon;
+                    return (
+                      <div 
+                        key={skill.name}
+                        className={`flex flex-col items-center gap-2 px-4 py-3 rounded-xl
+                          hover:bg-primary/10 transition-all duration-300 cursor-default
+                          ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                        style={{ transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 400}ms` }}
+                      >
+                        <IconComponent className="w-8 h-8 text-primary" />
+                        <span className="text-sm text-foreground/80 font-medium">
                           {skill.name}
                         </span>
-                        <span className="text-primary font-semibold">
-                          {skill.level}%
-                        </span>
                       </div>
-                      <div className="h-2 bg-muted/50 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-1000 ease-out ${
-                            isVisible ? '' : 'w-0'
-                          }`}
-                          style={{
-                            width: isVisible ? `${skill.level}%` : '0%',
-                            transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 600}ms`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
