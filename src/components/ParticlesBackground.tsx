@@ -93,13 +93,26 @@ const ParticlesBackground = () => {
         const dy = mouse.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        // Mouse interaction - repel or attract based on shift key
+        // Mouse interaction - gravity well with orbit when shift held
         if (distance < interactionRadius && distance > 0) {
           const force = (interactionRadius - distance) / interactionRadius;
           const angle = Math.atan2(dy, dx);
-          const direction = shiftRef.current ? 1 : -1; // attract if shift, repel otherwise
-          particle.x += Math.cos(angle) * force * 3 * direction;
-          particle.y += Math.sin(angle) * force * 3 * direction;
+          
+          if (shiftRef.current) {
+            // Gravity well orbit effect - attract + tangential force
+            const attractStrength = 0.8;
+            const orbitStrength = 2.5;
+            // Radial force (toward cursor)
+            particle.x += Math.cos(angle) * force * attractStrength;
+            particle.y += Math.sin(angle) * force * attractStrength;
+            // Tangential force (perpendicular, creates orbit)
+            particle.x += Math.cos(angle + Math.PI / 2) * force * orbitStrength;
+            particle.y += Math.sin(angle + Math.PI / 2) * force * orbitStrength;
+          } else {
+            // Normal repulsion
+            particle.x -= Math.cos(angle) * force * 3;
+            particle.y -= Math.sin(angle) * force * 3;
+          }
         } else {
           // Slowly return to base movement
           particle.x += particle.speedX;
