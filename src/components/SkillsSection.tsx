@@ -1,0 +1,88 @@
+const SkillsSection = () => {
+  const skillCategories = [
+    {
+      title: "Frontend",
+      skills: [
+        { name: "React", level: 95 },
+        { name: "TypeScript", level: 90 },
+        { name: "Tailwind CSS", level: 92 },
+        { name: "Next.js", level: 85 },
+      ],
+    },
+    {
+      title: "Backend",
+      skills: [
+        { name: "Node.js", level: 88 },
+        { name: "PostgreSQL", level: 82 },
+        { name: "GraphQL", level: 78 },
+        { name: "REST APIs", level: 90 },
+      ],
+    },
+    {
+      title: "Tools & Others",
+      skills: [
+        { name: "Git", level: 92 },
+        { name: "Docker", level: 75 },
+        { name: "Figma", level: 85 },
+        { name: "CI/CD", level: 80 },
+      ],
+    },
+  ];
+
+  return (
+    <section id="skills" className="py-20 lg:py-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Skills & Expertise
+            </h2>
+            <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              I've honed my skills across the full stack, always staying current
+              with the latest technologies and best practices.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {skillCategories.map((category, categoryIndex) => (
+              <div
+                key={category.title}
+                className="bg-card p-8 rounded-2xl shadow-sm border border-border/50 hover:shadow-lg transition-shadow duration-300"
+              >
+                <h3 className="text-xl font-semibold text-foreground mb-6">
+                  {category.title}
+                </h3>
+                <div className="space-y-5">
+                  {category.skills.map((skill, skillIndex) => (
+                    <div key={skill.name}>
+                      <div className="flex justify-between mb-2">
+                        <span className="text-foreground/80 font-medium">
+                          {skill.name}
+                        </span>
+                        <span className="text-primary font-semibold">
+                          {skill.level}%
+                        </span>
+                      </div>
+                      <div className="h-2 bg-muted/50 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-1000 ease-out"
+                          style={{
+                            width: `${skill.level}%`,
+                            animationDelay: `${categoryIndex * 0.2 + skillIndex * 0.1}s`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default SkillsSection;
