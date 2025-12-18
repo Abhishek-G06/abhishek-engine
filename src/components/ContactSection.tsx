@@ -91,11 +91,14 @@ const ContactSection = () => {
             {/* Contact Info */}
             <div className="lg:col-span-2 space-y-8">
               <div className="space-y-6">
-                {contactInfo.map((item) => (
+                {contactInfo.map((item, index) => (
                   <a
                     key={item.label}
                     href={item.href}
-                    className="flex items-start gap-4 group"
+                    className={`flex items-start gap-4 group transition-all duration-500 ${
+                      isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+                    }`}
+                    style={{ transitionDelay: `${index * 100 + 200}ms` }}
                   >
                     <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                       <item.icon className="w-5 h-5 text-accent-foreground group-hover:text-primary-foreground" />
@@ -117,13 +120,16 @@ const ContactSection = () => {
                   Follow me on social media
                 </p>
                 <div className="flex gap-3">
-                  {socialLinks.map((link) => (
+                  {socialLinks.map((link, index) => (
                     <a
                       key={link.label}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
+                      className={`p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500 ${
+                        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                      }`}
+                      style={{ transitionDelay: `${index * 100 + 500}ms` }}
                       aria-label={link.label}
                     >
                       <link.icon className="w-5 h-5" />
@@ -134,7 +140,12 @@ const ContactSection = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-3">
+            <div 
+              className={`lg:col-span-3 transition-all duration-700 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '300ms' }}
+            >
               <form
                 onSubmit={handleSubmit}
                 className="bg-card p-8 rounded-2xl shadow-sm border border-border/50"

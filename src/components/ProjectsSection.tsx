@@ -92,7 +92,10 @@ const ProjectsSection = () => {
               .map((project, index) => (
                 <div
                   key={project.title}
-                  className="group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className={`group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${index * 150 + 200}ms` }}
                 >
                   <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
                     <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
@@ -149,10 +152,13 @@ const ProjectsSection = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects
               .filter((p) => !p.featured)
-              .map((project) => (
+              .map((project, index) => (
                 <div
                   key={project.title}
-                  className="group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+                  className={`group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${index * 100 + 600}ms` }}
                 >
                   <div className="flex items-center justify-between mb-4">
                     <Folder className="w-10 h-10 text-primary/70" />
