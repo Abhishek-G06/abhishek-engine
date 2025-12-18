@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Folder } from "lucide-react";
+import FloatingElements from "@/components/3d/FloatingElements";
 
 const ProjectsSection = () => {
   const projects = [
@@ -60,8 +61,9 @@ const ProjectsSection = () => {
   ];
 
   return (
-    <section id="projects" className="py-20 lg:py-32 bg-card/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="py-20 lg:py-32 bg-card/50 relative overflow-hidden">
+      <FloatingElements variant="projects" />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
