@@ -1,3 +1,5 @@
+import FloatingElements from "@/components/3d/FloatingElements";
+
 const SkillsSection = () => {
   const skillCategories = [
     {
@@ -30,8 +32,9 @@ const SkillsSection = () => {
   ];
 
   return (
-    <section id="skills" className="py-20 lg:py-32">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="py-20 lg:py-32 relative overflow-hidden">
+      <FloatingElements variant="skills" />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">

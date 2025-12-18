@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import heroAvatar from "@/assets/hero-avatar.png";
+import HeroScene from "@/components/3d/HeroScene";
 
 const HeroSection = () => {
   const scrollToSection = (sectionId: string) => {
@@ -15,10 +16,11 @@ const HeroSection = () => {
       id="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-background to-background" />
-      <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/30 rounded-full blur-3xl" />
+      {/* 3D Background Scene */}
+      <HeroScene />
+      
+      {/* Subtle gradient overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-background/80 -z-5" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
