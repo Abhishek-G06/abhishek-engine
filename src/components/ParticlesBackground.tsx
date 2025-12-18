@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+interface TrailPoint {
+  x: number;
+  y: number;
+}
+
 interface Particle {
   x: number;
   y: number;
@@ -9,6 +14,7 @@ interface Particle {
   speedX: number;
   speedY: number;
   opacity: number;
+  trail: TrailPoint[];
 }
 
 const ParticlesBackground = () => {
@@ -46,9 +52,12 @@ const ParticlesBackground = () => {
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
           opacity: Math.random() * 0.4 + 0.4,
+          trail: [],
         });
       }
     };
+
+    const maxTrailLength = 8;
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -60,6 +69,12 @@ const ParticlesBackground = () => {
       const interactionRadius = 120;
       
       particlesRef.current.forEach((particle) => {
+        // Update trail - add current position before moving
+        particle.trail.push({ x: particle.x, y: particle.y });
+        if (particle.trail.length > maxTrailLength) {
+          particle.trail.shift();
+        }
+
         // Calculate distance from mouse
         const dx = mouse.x - particle.x;
         const dy = mouse.y - particle.y;
@@ -82,10 +97,10 @@ const ParticlesBackground = () => {
         particle.baseY += particle.speedY;
 
         // Wrap around edges
-        if (particle.x < 0) { particle.x = canvas.width; particle.baseX = canvas.width; }
-        if (particle.x > canvas.width) { particle.x = 0; particle.baseX = 0; }
-        if (particle.y < 0) { particle.y = canvas.height; particle.baseY = canvas.height; }
-        if (particle.y > canvas.height) { particle.y = 0; particle.baseY = 0; }
+        if (particle.x < 0) { particle.x = canvas.width; particle.baseX = canvas.width; particle.trail = []; }
+        if (particle.x > canvas.width) { particle.x = 0; particle.baseX = 0; particle.trail = []; }
+        if (particle.y < 0) { particle.y = canvas.height; particle.baseY = canvas.height; particle.trail = []; }
+        if (particle.y > canvas.height) { particle.y = 0; particle.baseY = 0; particle.trail = []; }
 
         // Breathing effect - each particle has its own phase
         const breathingPhase = timeRef.current + (particle.baseX + particle.baseY) * 0.01;
@@ -97,6 +112,20 @@ const ParticlesBackground = () => {
         const [h, s, l] = primaryHsl.split(' ').map((v) => parseFloat(v));
         const shiftedHue = ((h + hueShift) % 360 + 360) % 360;
         const particleColor = `${shiftedHue} ${s}% ${l}%`;
+
+        // Draw trail with fading opacity
+        if (particle.trail.length > 1) {
+          ctx.shadowBlur = 0;
+          for (let i = 0; i < particle.trail.length - 1; i++) {
+            const trailOpacity = (i / particle.trail.length) * breathingOpacity * 0.3;
+            const trailSize = particle.size * (0.3 + (i / particle.trail.length) * 0.5);
+            
+            ctx.beginPath();
+            ctx.arc(particle.trail[i].x, particle.trail[i].y, trailSize, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${particleColor} / ${trailOpacity})`;
+            ctx.fill();
+          }
+        }
 
         // Draw particle with glow effect
         const glowIntensity = distance < interactionRadius ? 1 + (1 - distance / interactionRadius) * 0.5 : 1;
