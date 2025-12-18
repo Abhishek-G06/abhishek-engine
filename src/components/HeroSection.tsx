@@ -33,24 +33,22 @@ const HeroSection = () => {
       const buttons = contentRef.current?.querySelector('[data-animate="buttons"]');
       const socials = contentRef.current?.querySelector('[data-animate="socials"]');
       
-      // Initial state: content slides from right, avatar slides from left
+      // Initial state: everything hidden
       const elements = [greeting, name, title, description, buttons, socials];
       gsap.set(elements, { 
         opacity: 0, 
-        x: 60,
+        y: 10,
         visibility: "hidden"
       });
       
       gsap.set(avatarRef.current, { 
         opacity: 0, 
-        x: -60,
         scale: 0.98,
         visibility: "hidden"
       });
       
       gsap.set(scrollIndicatorRef.current, { 
         opacity: 0,
-        y: 20,
         visibility: "hidden"
       });
 
@@ -62,57 +60,54 @@ const HeroSection = () => {
         }
       });
 
-      // Avatar slides in from left
-      tl.to(avatarRef.current, {
-        opacity: 1,
-        x: 0,
-        scale: 1,
-        visibility: "visible",
-        duration: 1.4,
-      })
-      // Content slides in from right with line-by-line stagger
-      .to(greeting, {
-        opacity: 1,
-        x: 0,
-        visibility: "visible",
-        duration: 1.4,
-      }, 0.1)
-      .to(name, {
-        opacity: 1,
-        x: 0,
-        visibility: "visible",
-        duration: 1.4,
-      }, 0.3)
-      .to(title, {
-        opacity: 1,
-        x: 0,
-        visibility: "visible",
-        duration: 1.4,
-      }, 0.5)
-      .to(description, {
-        opacity: 1,
-        x: 0,
-        visibility: "visible",
-        duration: 1.4,
-      }, 0.7)
-      .to(buttons, {
-        opacity: 1,
-        x: 0,
-        visibility: "visible",
-        duration: 1.4,
-      }, 0.9)
-      .to(socials, {
-        opacity: 1,
-        x: 0,
-        visibility: "visible",
-        duration: 1.4,
-      }, 1.1)
-      .to(scrollIndicatorRef.current, {
+      // Line-by-line reveal with stagger
+      tl.to(greeting, {
         opacity: 1,
         y: 0,
         visibility: "visible",
+        duration: 1.4,
+      })
+      .to(name, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2") // Stagger: 0.2s
+      .to(title, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(description, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(buttons, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(socials, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(avatarRef.current, {
+        opacity: 1,
+        scale: 1,
+        visibility: "visible",
+        duration: 1.6,
+      }, "-=1.4")
+      .to(scrollIndicatorRef.current, {
+        opacity: 1,
+        visibility: "visible",
         duration: 1.2,
-      }, 1.3);
+      }, "-=0.8");
 
       // Scroll-linked parallax for avatar (subtle movement)
       gsap.to(avatarRef.current, {
