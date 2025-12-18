@@ -1,7 +1,8 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
+import { use3DThemeColors, ThemeColors } from "@/hooks/use-3d-theme-colors";
 
 interface FloatingShapeProps {
   position: [number, number, number];
@@ -83,11 +84,52 @@ const MouseTracker = () => {
   return null;
 };
 
+interface SceneProps {
+  shapes: Array<{
+    position: [number, number, number];
+    geometry: "box" | "sphere" | "octahedron" | "torus" | "cone";
+    scale: number;
+    wireframe: boolean;
+    speed: number;
+    mouseInfluence: number;
+  }>;
+  colors: ThemeColors;
+}
+
+const Scene = ({ shapes, colors }: SceneProps) => {
+  const colorArray = [colors.primary, colors.secondary, colors.accent, colors.particles];
+  
+  return (
+    <>
+      <ambientLight intensity={0.7} />
+      <directionalLight position={[5, 5, 5]} intensity={0.6} />
+      <pointLight position={[-5, -5, 5]} intensity={0.3} color={colors.secondary} />
+      
+      <MouseTracker />
+      
+      {shapes.map((shape, index) => (
+        <FloatingShape
+          key={index}
+          position={shape.position}
+          geometry={shape.geometry}
+          scale={shape.scale}
+          color={colorArray[index % colorArray.length]}
+          wireframe={shape.wireframe}
+          speed={shape.speed}
+          mouseInfluence={shape.mouseInfluence}
+        />
+      ))}
+    </>
+  );
+};
+
 interface FloatingElementsProps {
   variant: "about" | "skills" | "projects";
 }
 
 const FloatingElements = ({ variant }: FloatingElementsProps) => {
+  const colors = use3DThemeColors();
+  
   const configs = {
     about: [
       { position: [-3.5, 1.5, 0] as [number, number, number], geometry: "octahedron" as const, scale: 1, wireframe: true, speed: 1.2, mouseInfluence: 0.4 },
@@ -119,24 +161,7 @@ const FloatingElements = ({ variant }: FloatingElementsProps) => {
         gl={{ antialias: true, alpha: true }}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[5, 5, 5]} intensity={0.6} />
-        <pointLight position={[-5, -5, 5]} intensity={0.3} color="#64B5A0" />
-        
-        <MouseTracker />
-        
-        {shapes.map((shape, index) => (
-          <FloatingShape
-            key={index}
-            position={shape.position}
-            geometry={shape.geometry}
-            scale={shape.scale}
-            color="#64B5A0"
-            wireframe={shape.wireframe}
-            speed={shape.speed}
-            mouseInfluence={shape.mouseInfluence}
-          />
-        ))}
+        <Scene shapes={shapes} colors={colors} />
       </Canvas>
     </div>
   );
