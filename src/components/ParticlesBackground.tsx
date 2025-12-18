@@ -34,6 +34,7 @@ const ParticlesBackground = () => {
   const burstParticlesRef = useRef<BurstParticle[]>([]);
   const animationRef = useRef<number>();
   const mouseRef = useRef({ x: -1000, y: -1000 });
+  const shiftRef = useRef(false);
   const timeRef = useRef(0);
 
   useEffect(() => {
@@ -92,12 +93,13 @@ const ParticlesBackground = () => {
         const dy = mouse.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        // Mouse repulsion effect
+        // Mouse interaction - repel or attract based on shift key
         if (distance < interactionRadius && distance > 0) {
           const force = (interactionRadius - distance) / interactionRadius;
           const angle = Math.atan2(dy, dx);
-          particle.x -= Math.cos(angle) * force * 3;
-          particle.y -= Math.sin(angle) * force * 3;
+          const direction = shiftRef.current ? 1 : -1; // attract if shift, repel otherwise
+          particle.x += Math.cos(angle) * force * 3 * direction;
+          particle.y += Math.sin(angle) * force * 3 * direction;
         } else {
           // Slowly return to base movement
           particle.x += particle.speedX;
@@ -235,6 +237,14 @@ const ParticlesBackground = () => {
       }
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') shiftRef.current = true;
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') shiftRef.current = false;
+    };
+
     resizeCanvas();
     createParticles();
     animate();
@@ -246,6 +256,8 @@ const ParticlesBackground = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
     window.addEventListener('click', handleClick);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
 
     return () => {
       if (animationRef.current) {
@@ -255,6 +267,8 @@ const ParticlesBackground = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('click', handleClick);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
 
