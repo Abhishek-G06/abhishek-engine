@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import heroAvatar from "@/assets/hero-avatar.png";
 import HeroScene from "@/components/3d/HeroScene";
+import ParallaxBackground from "@/components/ParallaxBackground";
 
 const HeroSection = () => {
   const scrollToSection = (sectionId: string) => {
@@ -16,6 +17,9 @@ const HeroSection = () => {
       id="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background"
     >
+      {/* Parallax Background */}
+      <ParallaxBackground variant="hero" />
+      
       {/* 3D Background Scene */}
       <HeroScene />
       
