@@ -8,7 +8,6 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import CursorAvatar from "@/components/CursorAvatar";
 
 const Index = () => {
   return (
@@ -27,7 +26,6 @@ const Index = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background relative">
-        <CursorAvatar />
         <ParticlesBackground />
         <Navbar />
         <main>
