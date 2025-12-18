@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, ShoppingCart, CheckSquare, Sparkles, Layout, Cloud, Dumbbell, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Github, Folder } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
@@ -15,8 +15,6 @@ const ProjectsSection = () => {
       liveUrl: "#",
       githubUrl: "#",
       featured: true,
-      icon: ShoppingCart,
-      gradient: "from-emerald-500/20 via-teal-500/20 to-cyan-500/20",
     },
     {
       title: "Task Management App",
@@ -26,8 +24,6 @@ const ProjectsSection = () => {
       liveUrl: "#",
       githubUrl: "#",
       featured: true,
-      icon: CheckSquare,
-      gradient: "from-violet-500/20 via-purple-500/20 to-fuchsia-500/20",
     },
     {
       title: "AI Content Generator",
@@ -37,8 +33,6 @@ const ProjectsSection = () => {
       liveUrl: "#",
       githubUrl: "#",
       featured: true,
-      icon: Sparkles,
-      gradient: "from-orange-500/20 via-amber-500/20 to-yellow-500/20",
     },
     {
       title: "Portfolio Template",
@@ -48,7 +42,6 @@ const ProjectsSection = () => {
       liveUrl: "#",
       githubUrl: "#",
       featured: false,
-      icon: Layout,
     },
     {
       title: "Weather Dashboard",
@@ -58,7 +51,6 @@ const ProjectsSection = () => {
       liveUrl: "#",
       githubUrl: "#",
       featured: false,
-      icon: Cloud,
     },
     {
       title: "Fitness Tracker",
@@ -68,7 +60,6 @@ const ProjectsSection = () => {
       liveUrl: "#",
       githubUrl: "#",
       featured: false,
-      icon: Dumbbell,
     },
   ];
 
@@ -94,165 +85,120 @@ const ProjectsSection = () => {
             </p>
           </div>
 
-          {/* Featured Projects - Large Cards */}
-          <div className="grid lg:grid-cols-3 gap-6 mb-16">
+          {/* Featured Projects */}
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
             {projects
               .filter((p) => p.featured)
-              .map((project, index) => {
-                const IconComponent = project.icon;
-                return (
-                  <div
-                    key={project.title}
-                    className={`group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
-                      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                    style={{ transitionDelay: `${index * 150 + 200}ms` }}
-                  >
-                    {/* Card Background with Glassmorphism */}
-                    <div className="absolute inset-0 bg-card/40 backdrop-blur-xl border border-border/30 rounded-2xl" />
-                    
-                    {/* Gradient Overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50 group-hover:opacity-70 transition-opacity duration-500`} />
-                    
-                    {/* Shine Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    {/* Content */}
-                    <div className="relative p-6 h-full flex flex-col">
-                      {/* Header */}
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                          <IconComponent className="w-6 h-6 text-primary" />
-                        </div>
-                        <div className="flex gap-2">
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-background/50 text-muted-foreground hover:text-primary hover:bg-background/80 transition-all duration-300"
-                          >
-                            <Github className="w-4 h-4" />
-                          </a>
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-background/50 text-muted-foreground hover:text-primary hover:bg-background/80 transition-all duration-300"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        </div>
-                      </div>
-                      
-                      {/* Title & Description */}
-                      <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
-                        {project.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm mb-6 line-clamp-3 flex-grow">
-                        {project.description}
-                      </p>
-                      
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-3 py-1 bg-background/50 backdrop-blur-sm text-foreground/70 text-xs font-medium rounded-full border border-border/30"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      {/* CTA Button */}
+              .map((project, index) => (
+                <div
+                  key={project.title}
+                  className={`group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${index * 150 + 200}ms` }}
+                >
+                  <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
+                    <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-3">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 bg-accent text-accent-foreground text-xs font-medium rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-3">
                       <Button
                         variant="default"
                         size="sm"
                         asChild
-                        className="w-full group/btn"
+                        className="flex-1"
                       >
                         <a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          View Project
-                          <ArrowUpRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Live Demo
+                        </a>
+                      </Button>
+                      <Button variant="outline" size="sm" asChild>
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Github className="w-4 h-4" />
                         </a>
                       </Button>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
           </div>
 
-          {/* Other Projects - Compact Cards */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground/80 mb-6 text-center">
-              Other Noteworthy Projects
-            </h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {projects
-                .filter((p) => !p.featured)
-                .map((project, index) => {
-                  const IconComponent = project.icon;
-                  return (
-                    <div
-                      key={project.title}
-                      className={`group relative overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-1 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                      }`}
-                      style={{ transitionDelay: `${index * 100 + 600}ms` }}
-                    >
-                      {/* Background */}
-                      <div className="absolute inset-0 bg-card/30 backdrop-blur-sm border border-border/20 rounded-xl group-hover:bg-card/50 group-hover:border-primary/30 transition-all duration-300" />
-                      
-                      {/* Content */}
-                      <div className="relative p-5">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="p-2 rounded-lg bg-primary/10">
-                            <IconComponent className="w-5 h-5 text-primary/70" />
-                          </div>
-                          <div className="flex gap-2">
-                            <a
-                              href={project.githubUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-muted-foreground hover:text-primary transition-colors"
-                            >
-                              <Github className="w-4 h-4" />
-                            </a>
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-muted-foreground hover:text-primary transition-colors"
-                            >
-                              <ExternalLink className="w-4 h-4" />
-                            </a>
-                          </div>
-                        </div>
-                        <h3 className="text-base font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                          {project.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.slice(0, 3).map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-xs text-muted-foreground/70 font-mono"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+          {/* Other Projects */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects
+              .filter((p) => !p.featured)
+              .map((project, index) => (
+                <div
+                  key={project.title}
+                  className={`group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${index * 100 + 600}ms` }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <Folder className="w-10 h-10 text-primary/70" />
+                    <div className="flex gap-2">
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <Github className="w-5 h-5" />
+                      </a>
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        <ExternalLink className="w-5 h-5" />
+                      </a>
                     </div>
-                  );
-                })}
-            </div>
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs text-muted-foreground font-mono"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
