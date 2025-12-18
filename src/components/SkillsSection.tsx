@@ -60,7 +60,7 @@ const SkillsSection = () => {
             {skillCategories.map((category, categoryIndex) => (
               <div
                 key={category.title}
-                className={`relative overflow-hidden bg-card/60 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-border/30 hover:shadow-lg transition-all duration-500 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/10 before:via-transparent before:to-transparent before:pointer-events-none ${
+                className={`relative overflow-hidden bg-card/30 backdrop-blur-xl p-8 rounded-2xl shadow-lg border border-border/20 hover:shadow-xl hover:bg-card/40 transition-all duration-500 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/20 before:via-white/5 before:to-transparent before:pointer-events-none ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{ transitionDelay: `${categoryIndex * 150 + 200}ms` }}
