@@ -4,8 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const ContactSection = () => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -65,7 +67,13 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 lg:py-32">
+    <section 
+      ref={ref as React.RefObject<HTMLElement>}
+      id="contact" 
+      className={`py-20 lg:py-32 transition-all duration-700 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
