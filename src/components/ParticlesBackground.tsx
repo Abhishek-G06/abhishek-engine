@@ -30,7 +30,7 @@ const ParticlesBackground = () => {
     };
 
     const createParticles = () => {
-      const particleCount = Math.min(60, Math.floor(window.innerWidth / 25));
+      const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
       particlesRef.current = [];
       
       for (let i = 0; i < particleCount; i++) {
@@ -41,10 +41,10 @@ const ParticlesBackground = () => {
           y,
           baseX: x,
           baseY: y,
-          size: Math.random() * 2 + 1,
+          size: Math.random() * 3 + 2,
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
-          opacity: Math.random() * 0.5 + 0.1,
+          opacity: Math.random() * 0.4 + 0.4,
         });
       }
     };
@@ -100,12 +100,12 @@ const ParticlesBackground = () => {
           const dy = particle.y - otherParticle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          if (distance < 180) {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `hsl(${primaryHsl} / ${0.15 * (1 - distance / 150)})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `hsl(${primaryHsl} / ${0.3 * (1 - distance / 180)})`;
+            ctx.lineWidth = 1;
             ctx.stroke();
           }
         });
