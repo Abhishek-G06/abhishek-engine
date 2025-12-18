@@ -84,8 +84,9 @@ const SkillsSection = () => {
                 </h3>
                 <div 
                   className="inline-flex flex-wrap justify-center gap-6 px-8 py-6 rounded-2xl 
-                    bg-background/20 backdrop-blur-md border border-border/30 
-                    shadow-lg"
+                    bg-background/10 backdrop-blur-lg border border-primary/20 
+                    shadow-[0_8px_32px_rgba(0,0,0,0.12)] 
+                    hover:bg-background/15 hover:border-primary/30 transition-all duration-300"
                 >
                   {category.skills.map((skill, skillIndex) => {
                     const IconComponent = skill.icon;
