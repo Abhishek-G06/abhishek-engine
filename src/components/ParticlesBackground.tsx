@@ -15,7 +15,6 @@ interface TrailPoint {
   x: number;
   y: number;
   age: number;
-  opacity: number;
 }
 
 const ParticlesBackground = () => {
@@ -68,46 +67,47 @@ const ParticlesBackground = () => {
       const interactionRadius = 120;
 
       // Add new trail points when mouse moves
-      if (mouse.x > 0 && mouse.y > 0) {
+      if (mouse.x > 0 && mouse.y > 0 && prevMouse.x > 0) {
         const dx = mouse.x - prevMouse.x;
         const dy = mouse.y - prevMouse.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance > 5) {
+        if (distance > 3) {
           // Add points along the movement path for smooth trail
-          const steps = Math.min(Math.floor(distance / 5), 10);
+          const steps = Math.min(Math.ceil(distance / 3), 15);
           for (let i = 0; i < steps; i++) {
             const t = i / steps;
             trailRef.current.push({
               x: prevMouse.x + dx * t,
               y: prevMouse.y + dy * t,
               age: 0,
-              opacity: 0.6,
             });
           }
           prevMouseRef.current = { ...mouse };
         }
+      } else if (mouse.x > 0 && mouse.y > 0) {
+        prevMouseRef.current = { ...mouse };
       }
 
       // Update and draw trail
-      const maxTrailAge = 40;
+      const maxTrailAge = 50;
       trailRef.current = trailRef.current.filter(point => {
         point.age++;
-        point.opacity = 0.6 * (1 - point.age / maxTrailAge);
         return point.age < maxTrailAge;
       });
 
-      // Draw trail with gradient colors
-      trailRef.current.forEach((point, index) => {
-        const hueShift = (index * 2) % 60; // Subtle hue variation along trail
-        const size = 15 * (1 - point.age / maxTrailAge);
+      // Draw trail with gradient glow effect
+      trailRef.current.forEach((point) => {
+        const lifeRatio = 1 - point.age / maxTrailAge;
+        const size = 30 * lifeRatio;
+        const opacity = lifeRatio * 0.4;
         
         const gradient = ctx.createRadialGradient(
           point.x, point.y, 0,
           point.x, point.y, size
         );
-        gradient.addColorStop(0, `hsla(${primaryHsl}, ${point.opacity})`);
-        gradient.addColorStop(0.5, `hsla(${primaryHsl}, ${point.opacity * 0.5})`);
+        gradient.addColorStop(0, `hsla(${primaryHsl}, ${opacity})`);
+        gradient.addColorStop(0.4, `hsla(${primaryHsl}, ${opacity * 0.6})`);
         gradient.addColorStop(1, `hsla(${primaryHsl}, 0)`);
         
         ctx.beginPath();
