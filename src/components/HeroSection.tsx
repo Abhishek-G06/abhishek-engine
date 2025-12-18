@@ -14,15 +14,15 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background"
     >
       {/* 3D Background Scene */}
       <HeroScene />
       
       {/* Subtle gradient overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-background/80 -z-5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-transparent to-background/70 pointer-events-none" style={{ zIndex: 1 }} />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative" style={{ zIndex: 2 }}>
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-left">

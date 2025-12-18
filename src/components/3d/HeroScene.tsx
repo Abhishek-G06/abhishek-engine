@@ -26,7 +26,7 @@ const AnimatedSphere = ({ position, scale, speed, distort, color }: {
         <MeshDistortMaterial
           color={color}
           transparent
-          opacity={0.6}
+          opacity={0.35}
           distort={distort}
           speed={2}
           roughness={0.2}
@@ -95,23 +95,23 @@ const GeometricShapes = () => {
   return (
     <>
       <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.8}>
-        <mesh ref={torusRef} position={[-4, 2, -3]}>
+        <mesh ref={torusRef} position={[-6, 3, -6]}>
           <torusGeometry args={[0.8, 0.3, 16, 32]} />
           <meshStandardMaterial
             color="#4A9B84"
             transparent
-            opacity={0.5}
+            opacity={0.3}
             wireframe
           />
         </mesh>
       </Float>
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.6}>
-        <mesh ref={octaRef} position={[4, -1, -2]}>
+        <mesh ref={octaRef} position={[6, -3, -5]}>
           <octahedronGeometry args={[0.7]} />
           <meshStandardMaterial
             color="#64B5A0"
             transparent
-            opacity={0.4}
+            opacity={0.25}
             wireframe
           />
         </mesh>
@@ -122,19 +122,20 @@ const GeometricShapes = () => {
 
 const HeroScene = () => {
   return (
-    <div className="absolute inset-0 -z-10">
+    <div className="absolute inset-0" style={{ zIndex: 0 }}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 60 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
+        style={{ background: 'transparent' }}
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={0.8} />
         <pointLight position={[-10, -10, -5]} intensity={0.3} color="#64B5A0" />
         
-        <AnimatedSphere position={[3, 1, -2]} scale={1.5} speed={1.5} distort={0.4} color="#4A9B84" />
-        <AnimatedSphere position={[-3, -1, -3]} scale={1} speed={2} distort={0.3} color="#64B5A0" />
-        <AnimatedSphere position={[0, 2, -4]} scale={0.8} speed={1.8} distort={0.5} color="#3D8B6E" />
+        <AnimatedSphere position={[6, 3, -8]} scale={1} speed={1.5} distort={0.4} color="#4A9B84" />
+        <AnimatedSphere position={[-6, -3, -7]} scale={0.8} speed={2} distort={0.3} color="#64B5A0" />
+        <AnimatedSphere position={[5, -3, -9]} scale={0.6} speed={1.8} distort={0.5} color="#3D8B6E" />
         
         <GeometricShapes />
         <Particles count={150} />
