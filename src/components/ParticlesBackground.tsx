@@ -92,24 +92,35 @@ const ParticlesBackground = () => {
         const breathingScale = 1 + Math.sin(breathingPhase) * 0.2;
         const breathingOpacity = particle.opacity * (0.8 + Math.sin(breathingPhase) * 0.2);
 
+        // Color shifting - subtle hue variation over time
+        const hueShift = Math.sin(timeRef.current * 0.3 + breathingPhase * 0.5) * 15;
+        const [h, s, l] = primaryHsl.split(' ').map((v) => parseFloat(v));
+        const shiftedHue = ((h + hueShift) % 360 + 360) % 360;
+        const particleColor = `${shiftedHue} ${s}% ${l}%`;
+
         // Draw particle with glow effect
         const glowIntensity = distance < interactionRadius ? 1 + (1 - distance / interactionRadius) * 0.5 : 1;
         const finalSize = particle.size * glowIntensity * breathingScale;
         
         // Add subtle glow
         ctx.shadowBlur = 15 * glowIntensity * breathingScale;
-        ctx.shadowColor = `hsl(${primaryHsl} / ${breathingOpacity * 0.8})`;
+        ctx.shadowColor = `hsl(${particleColor} / ${breathingOpacity * 0.8})`;
         
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, finalSize, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${primaryHsl} / ${breathingOpacity * glowIntensity})`;
+        ctx.fillStyle = `hsl(${particleColor} / ${breathingOpacity * glowIntensity})`;
         ctx.fill();
         
         // Reset shadow for lines
         ctx.shadowBlur = 0;
       });
 
-      // Draw connections between nearby particles
+      // Draw connections between nearby particles with color shift
+      const [h, s, l] = primaryHsl.split(' ').map((v) => parseFloat(v));
+      const lineHueShift = Math.sin(timeRef.current * 0.3) * 15;
+      const lineHue = ((h + lineHueShift) % 360 + 360) % 360;
+      const lineColor = `${lineHue} ${s}% ${l}%`;
+
       particlesRef.current.forEach((particle, i) => {
         particlesRef.current.slice(i + 1).forEach((otherParticle) => {
           const dx = particle.x - otherParticle.x;
@@ -120,7 +131,7 @@ const ParticlesBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `hsl(${primaryHsl} / ${0.3 * (1 - distance / 180)})`;
+            ctx.strokeStyle = `hsl(${lineColor} / ${0.3 * (1 - distance / 180)})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
