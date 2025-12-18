@@ -1,9 +1,18 @@
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import heroAvatar from "@/assets/hero-avatar.png";
-import ParallaxBackground from "@/components/ParallaxBackground";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const scrollIndicatorRef = useRef<HTMLButtonElement>(null);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -11,39 +20,163 @@ const HeroSection = () => {
     }
   };
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Custom easing: cubic-bezier(0.22, 1, 0.36, 1)
+      const customEase = "power2.out";
+      
+      // Get all animated elements
+      const greeting = contentRef.current?.querySelector('[data-animate="greeting"]');
+      const name = contentRef.current?.querySelector('[data-animate="name"]');
+      const title = contentRef.current?.querySelector('[data-animate="title"]');
+      const description = contentRef.current?.querySelector('[data-animate="description"]');
+      const buttons = contentRef.current?.querySelector('[data-animate="buttons"]');
+      const socials = contentRef.current?.querySelector('[data-animate="socials"]');
+      
+      // Initial state: everything hidden
+      const elements = [greeting, name, title, description, buttons, socials];
+      gsap.set(elements, { 
+        opacity: 0, 
+        y: 10,
+        visibility: "hidden"
+      });
+      
+      gsap.set(avatarRef.current, { 
+        opacity: 0, 
+        scale: 0.98,
+        visibility: "hidden"
+      });
+      
+      gsap.set(scrollIndicatorRef.current, { 
+        opacity: 0,
+        visibility: "hidden"
+      });
+
+      // Create timeline with 300ms initial delay
+      const tl = gsap.timeline({
+        delay: 0.3,
+        defaults: {
+          ease: customEase,
+        }
+      });
+
+      // Line-by-line reveal with stagger
+      tl.to(greeting, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      })
+      .to(name, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2") // Stagger: 0.2s
+      .to(title, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(description, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(buttons, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(socials, {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        duration: 1.4,
+      }, "-=1.2")
+      .to(avatarRef.current, {
+        opacity: 1,
+        scale: 1,
+        visibility: "visible",
+        duration: 1.6,
+      }, "-=1.4")
+      .to(scrollIndicatorRef.current, {
+        opacity: 1,
+        visibility: "visible",
+        duration: 1.2,
+      }, "-=0.8");
+
+      // Scroll-linked parallax for avatar (subtle movement)
+      gsap.to(avatarRef.current, {
+        y: 100,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,
+        }
+      });
+
+      // Fade out content on scroll
+      gsap.to(contentRef.current, {
+        opacity: 0,
+        y: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "20% top",
+          end: "50% top",
+          scrub: 1,
+        }
+      });
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background pt-20"
     >
-      {/* Parallax Background */}
-      <ParallaxBackground variant="hero" />
-      
       {/* Subtle gradient overlay for readability */}
       <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-transparent to-background/70 pointer-events-none" style={{ zIndex: 1 }} />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
           {/* Text Content */}
-          <div className="flex-1 text-center lg:text-left">
-            <p className="text-primary font-medium mb-4 animate-fade-in opacity-0" style={{ animationDelay: "0.1s" }}>
+          <div ref={contentRef} className="flex-1 text-center lg:text-left">
+            <p 
+              data-animate="greeting"
+              className="text-primary font-medium mb-4"
+              style={{ visibility: "hidden" }}
+            >
               Hello, I'm
             </p>
             <h1
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.2s" }}
+              data-animate="name"
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6"
+              style={{ visibility: "hidden" }}
             >
               Jane Doe
             </h1>
             <h2
-              className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-serif mb-8 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.3s" }}
+              data-animate="title"
+              className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-serif mb-8"
+              style={{ visibility: "hidden" }}
             >
               Full Stack Developer & Designer
             </h2>
             <p
-              className="text-foreground/70 text-lg max-w-lg mx-auto lg:mx-0 mb-10 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.4s" }}
+              data-animate="description"
+              className="text-foreground/70 text-lg max-w-lg mx-auto lg:mx-0 mb-10"
+              style={{ visibility: "hidden" }}
             >
               I craft beautiful, functional digital experiences that help
               businesses grow and users smile.
@@ -51,8 +184,9 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10 animate-fade-in opacity-0"
-              style={{ animationDelay: "0.5s" }}
+              data-animate="buttons"
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
+              style={{ visibility: "hidden" }}
             >
               <Button
                 variant="hero"
@@ -72,8 +206,9 @@ const HeroSection = () => {
 
             {/* Social Links */}
             <div
-              className="flex gap-4 justify-center lg:justify-start animate-fade-in opacity-0"
-              style={{ animationDelay: "0.6s" }}
+              data-animate="socials"
+              className="flex gap-4 justify-center lg:justify-start"
+              style={{ visibility: "hidden" }}
             >
               <a
                 href="https://github.com"
@@ -102,8 +237,9 @@ const HeroSection = () => {
 
           {/* Avatar */}
           <div
-            className="flex-shrink-0 animate-scale-in opacity-0"
-            style={{ animationDelay: "0.3s" }}
+            ref={avatarRef}
+            className="flex-shrink-0"
+            style={{ visibility: "hidden" }}
           >
             <div className="relative">
               <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
@@ -124,8 +260,10 @@ const HeroSection = () => {
 
         {/* Scroll indicator */}
         <button
+          ref={scrollIndicatorRef}
           onClick={() => scrollToSection("about")}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-muted-foreground hover:text-primary transition-colors"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors"
+          style={{ visibility: "hidden" }}
         >
           <ArrowDown className="w-6 h-6" />
         </button>
