@@ -16,6 +16,7 @@ const ParticlesBackground = () => {
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>();
   const mouseRef = useRef({ x: -1000, y: -1000 });
+  const timeRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -51,6 +52,7 @@ const ParticlesBackground = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      timeRef.current += 0.02;
 
       const computedStyle = getComputedStyle(document.documentElement);
       const primaryHsl = computedStyle.getPropertyValue('--primary').trim();
@@ -85,16 +87,22 @@ const ParticlesBackground = () => {
         if (particle.y < 0) { particle.y = canvas.height; particle.baseY = canvas.height; }
         if (particle.y > canvas.height) { particle.y = 0; particle.baseY = 0; }
 
+        // Breathing effect - each particle has its own phase
+        const breathingPhase = timeRef.current + (particle.baseX + particle.baseY) * 0.01;
+        const breathingScale = 1 + Math.sin(breathingPhase) * 0.2;
+        const breathingOpacity = particle.opacity * (0.8 + Math.sin(breathingPhase) * 0.2);
+
         // Draw particle with glow effect
         const glowIntensity = distance < interactionRadius ? 1 + (1 - distance / interactionRadius) * 0.5 : 1;
+        const finalSize = particle.size * glowIntensity * breathingScale;
         
         // Add subtle glow
-        ctx.shadowBlur = 15 * glowIntensity;
-        ctx.shadowColor = `hsl(${primaryHsl} / ${particle.opacity * 0.8})`;
+        ctx.shadowBlur = 15 * glowIntensity * breathingScale;
+        ctx.shadowColor = `hsl(${primaryHsl} / ${breathingOpacity * 0.8})`;
         
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size * glowIntensity, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${primaryHsl} / ${particle.opacity * glowIntensity})`;
+        ctx.arc(particle.x, particle.y, finalSize, 0, Math.PI * 2);
+        ctx.fillStyle = `hsl(${primaryHsl} / ${breathingOpacity * glowIntensity})`;
         ctx.fill();
         
         // Reset shadow for lines
