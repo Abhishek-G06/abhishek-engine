@@ -7,6 +7,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
+import ParticlesBackground from "@/components/ParticlesBackground";
 
 const Index = () => {
   return (
@@ -24,7 +25,8 @@ const Index = () => {
         <link rel="canonical" href="https://example.com" />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative">
+        <ParticlesBackground />
         <Navbar />
         <main>
           <HeroSection />
