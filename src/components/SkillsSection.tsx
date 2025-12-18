@@ -92,12 +92,12 @@ const SkillsSection = () => {
                     return (
                       <div 
                         key={skill.name}
-                        className={`flex flex-col items-center gap-2 px-4 py-3 rounded-xl
+                        className={`group flex flex-col items-center gap-2 px-4 py-3 rounded-xl
                           hover:bg-primary/10 transition-all duration-300 cursor-default
                           ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
                         style={{ transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 400}ms` }}
                       >
-                        <IconComponent className="w-8 h-8 text-primary" />
+                        <IconComponent className="w-8 h-8 text-primary transition-transform duration-300 group-hover:animate-float" />
                         <span className="text-sm text-foreground/80 font-medium">
                           {skill.name}
                         </span>
