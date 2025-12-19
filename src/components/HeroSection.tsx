@@ -164,7 +164,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-transparent to-background/70 pointer-events-none" style={{ zIndex: 1 }} />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 overflow-hidden">
-        <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
           {/* Text Content - Right side on desktop */}
           <div ref={contentRef} className="flex-1 text-center lg:text-left">
             <p 
