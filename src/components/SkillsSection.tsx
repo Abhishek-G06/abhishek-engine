@@ -1,5 +1,4 @@
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import ParallaxBackground from "@/components/ParallaxBackground";
+import { useGsapScroll } from "@/hooks/use-gsap-scroll";
 import { 
   Code2, 
   FileCode, 
@@ -16,7 +15,7 @@ import {
 } from "lucide-react";
 
 const SkillsSection = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { sectionRef, contentRef } = useGsapScroll({ stagger: 0.1, y: 30 });
   
   const skillCategories = [
     {
@@ -50,33 +49,29 @@ const SkillsSection = () => {
 
   return (
     <section 
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={sectionRef}
       id="skills" 
-      className={`py-20 lg:py-32 relative overflow-hidden transition-all duration-700 bg-transparent ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
+      className="py-20 lg:py-32 relative overflow-hidden bg-transparent"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div ref={contentRef} className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            <h2 data-scroll className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Skills & Expertise
             </h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div data-scroll className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
+            <p data-scroll className="text-lg text-muted-foreground max-w-2xl mx-auto">
               I've honed my skills across the full stack, always staying current
               with the latest technologies and best practices.
             </p>
           </div>
 
           <div className="space-y-12">
-            {skillCategories.map((category, categoryIndex) => (
+            {skillCategories.map((category) => (
               <div
                 key={category.title}
-                className={`text-center transition-all duration-500 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
-                style={{ transitionDelay: `${categoryIndex * 150 + 200}ms` }}
+                data-scroll
+                className="text-center"
               >
                 <h3 className="text-xl font-semibold text-foreground mb-6">
                   {category.title}
@@ -87,15 +82,13 @@ const SkillsSection = () => {
                     shadow-[0_8px_32px_rgba(0,0,0,0.12)] 
                     hover:bg-background/15 hover:border-primary/30 transition-all duration-300"
                 >
-                  {category.skills.map((skill, skillIndex) => {
+                  {category.skills.map((skill) => {
                     const IconComponent = skill.icon;
                     return (
                       <div 
                         key={skill.name}
-                        className={`group flex flex-col items-center gap-2 px-4 py-3 rounded-xl
-                          transition-all duration-300 cursor-default
-                          ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
-                        style={{ transitionDelay: `${categoryIndex * 150 + skillIndex * 100 + 400}ms` }}
+                        className="group flex flex-col items-center gap-2 px-4 py-3 rounded-xl
+                          transition-all duration-300 cursor-default"
                       >
                         <div 
                           className="p-2 rounded-lg transition-all duration-300 group-hover:scale-110"
