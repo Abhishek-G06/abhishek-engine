@@ -4,11 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-react";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useGsapScroll } from "@/hooks/use-gsap-scroll";
 import ParallaxBackground from "@/components/ParallaxBackground";
 
 const ContactSection = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { sectionRef, contentRef } = useGsapScroll({ stagger: 0.1, y: 30 });
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -69,21 +69,19 @@ const ContactSection = () => {
 
   return (
     <section 
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={sectionRef}
       id="contact" 
-      className={`py-20 lg:py-32 relative overflow-hidden transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
+      className="py-20 lg:py-32 relative overflow-hidden"
     >
       <ParallaxBackground variant="contact" />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div ref={contentRef} className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            <h2 data-scroll className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Get in Touch
             </h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div data-scroll className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
+            <p data-scroll className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Have a project in mind or just want to say hello? I'd love to hear
               from you. Let's create something amazing together!
             </p>
@@ -93,14 +91,12 @@ const ContactSection = () => {
             {/* Contact Info */}
             <div className="lg:col-span-2 space-y-8">
               <div className="space-y-6">
-                {contactInfo.map((item, index) => (
+                {contactInfo.map((item) => (
                   <a
                     key={item.label}
                     href={item.href}
-                    className={`flex items-start gap-4 group transition-all duration-500 ${
-                      isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-                    }`}
-                    style={{ transitionDelay: `${index * 100 + 200}ms` }}
+                    data-scroll
+                    className="flex items-start gap-4 group"
                   >
                     <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                       <item.icon className="w-5 h-5 text-accent-foreground group-hover:text-primary-foreground" />
@@ -117,21 +113,18 @@ const ContactSection = () => {
                 ))}
               </div>
 
-              <div className="pt-6 border-t border-border">
+              <div data-scroll className="pt-6 border-t border-border">
                 <p className="text-sm text-muted-foreground mb-4">
                   Follow me on social media
                 </p>
                 <div className="flex gap-3">
-                  {socialLinks.map((link, index) => (
+                  {socialLinks.map((link) => (
                     <a
                       key={link.label}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500 ${
-                        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                      }`}
-                      style={{ transitionDelay: `${index * 100 + 500}ms` }}
+                      className="p-3 rounded-lg bg-card border border-border hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500"
                       aria-label={link.label}
                     >
                       <link.icon className="w-5 h-5" />
@@ -143,10 +136,8 @@ const ContactSection = () => {
 
             {/* Contact Form */}
             <div 
-              className={`lg:col-span-3 transition-all duration-700 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: '300ms' }}
+              data-scroll
+              className="lg:col-span-3"
             >
               <form
                 onSubmit={handleSubmit}
