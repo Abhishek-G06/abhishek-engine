@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,6 +11,12 @@ interface SmoothScrollProviderProps {
 
 const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
   const lenisRef = useRef<Lenis | null>(null);
+  const rafIdRef = useRef<number | null>(null);
+
+  const raf = useCallback((time: number) => {
+    lenisRef.current?.raf(time);
+    rafIdRef.current = requestAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     // Initialize Lenis with inertia scrolling
@@ -28,19 +34,20 @@ const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
     // Connect Lenis to GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
+    // Start the animation frame loop
+    rafIdRef.current = requestAnimationFrame(raf);
 
-    gsap.ticker.lagSmoothing(0);
+    // Refresh ScrollTrigger after Lenis is ready
+    ScrollTrigger.refresh();
 
     return () => {
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
       lenis.destroy();
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000);
-      });
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-  }, []);
+  }, [raf]);
 
   return <>{children}</>;
 };
