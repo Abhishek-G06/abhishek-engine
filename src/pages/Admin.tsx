@@ -3,7 +3,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from "@/hooks/use-projects";
 import type { Project, ProjectInsert } from "@/hooks/use-projects";
 import ProjectForm from "@/components/admin/ProjectForm";
-import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -100,8 +99,7 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
-      <header className="border-b border-border pt-16 lg:pt-20">
+      <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold text-foreground">Project Dashboard</h1>
           <Button variant="outline" size="sm" onClick={signOut}>
