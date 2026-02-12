@@ -21,20 +21,14 @@ const Admin = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (isSignUp) {
-        await signUp(email, password);
-        toast.success("Check your email to confirm your account!");
-      } else {
-        await signIn(email, password);
-        toast.success("Logged in successfully");
-      }
+      await signIn(email, password);
+      toast.success("Logged in successfully");
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -84,7 +78,7 @@ const Admin = () => {
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-center">{isSignUp ? "Sign Up" : "Admin Login"}</CardTitle>
+            <CardTitle className="text-center">Admin Login</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -96,13 +90,7 @@ const Admin = () => {
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               </div>
-              <Button type="submit" className="w-full">{isSignUp ? "Sign Up" : "Sign In"}</Button>
-              <p className="text-sm text-center text-muted-foreground">
-                {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-                <button type="button" onClick={() => setIsSignUp(!isSignUp)} className="text-primary hover:underline">
-                  {isSignUp ? "Sign In" : "Sign Up"}
-                </button>
-              </p>
+              <Button type="submit" className="w-full">Sign In</Button>
             </form>
           </CardContent>
         </Card>
