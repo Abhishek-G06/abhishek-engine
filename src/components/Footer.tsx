@@ -1,4 +1,5 @@
 import { Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -47,11 +48,16 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-border text-center">
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
-            © {currentYear} Jane Doe. Made with{" "}
-            <Heart className="w-4 h-4 text-destructive fill-destructive" /> All
-            rights reserved.
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
+              © {currentYear} Jane Doe. Made with{" "}
+              <Heart className="w-4 h-4 text-destructive fill-destructive" /> All
+              rights reserved.
+            </p>
+            <Link to="/admin" className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+              Admin
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
