@@ -3,14 +3,14 @@ import { useAuth } from "@/hooks/use-auth";
 import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from "@/hooks/use-projects";
 import type { Project, ProjectInsert } from "@/hooks/use-projects";
 import ProjectForm from "@/components/admin/ProjectForm";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Pencil, Trash2, Plus, LogOut, ArrowLeft, Star } from "lucide-react";
+import { Pencil, Trash2, Plus, LogOut, Star } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
 
 const Admin = () => {
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
@@ -100,17 +100,10 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border">
+      <Navbar />
+      <header className="border-b border-border pt-16 lg:pt-20">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Site
-              </Button>
-            </Link>
-            <h1 className="text-xl font-bold text-foreground">Project Dashboard</h1>
-          </div>
+          <h1 className="text-xl font-bold text-foreground">Project Dashboard</h1>
           <Button variant="outline" size="sm" onClick={signOut}>
             <LogOut className="w-4 h-4 mr-2" />
             Sign Out
@@ -168,7 +161,7 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add Project</DialogTitle>
           </DialogHeader>
@@ -182,7 +175,7 @@ const Admin = () => {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>

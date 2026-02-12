@@ -80,7 +80,7 @@ const ProjectForm = ({ project, onSubmit, onCancel, isLoading }: ProjectFormProp
         <Label htmlFor="tags">Tags (comma-separated)</Label>
         <Input id="tags" value={tagsStr} onChange={(e) => setTagsStr(e.target.value)} placeholder="React, TypeScript, Node.js" />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="liveUrl">Live URL</Label>
           <Input id="liveUrl" value={liveUrl} onChange={(e) => setLiveUrl(e.target.value)} />
@@ -124,12 +124,12 @@ const ProjectForm = ({ project, onSubmit, onCancel, isLoading }: ProjectFormProp
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="order">Display Order</Label>
           <Input id="order" type="number" value={displayOrder} onChange={(e) => setDisplayOrder(Number(e.target.value))} />
         </div>
-        <div className="flex items-center gap-2 pt-6">
+        <div className="flex items-center gap-2 sm:pt-6">
           <Switch id="featured" checked={featured} onCheckedChange={setFeatured} />
           <Label htmlFor="featured">Featured</Label>
         </div>
