@@ -2,66 +2,44 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Folder } from "lucide-react";
 import { useGsapScroll } from "@/hooks/use-gsap-scroll";
 import ParallaxBackground from "@/components/ParallaxBackground";
+import { useProjects } from "@/hooks/use-projects";
+
+const fallbackProjects = [
+  {
+    title: "E-Commerce Platform",
+    description: "A full-featured online store with cart, checkout, and payment integration.",
+    tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
+    live_url: "#", github_url: "#", featured: true, image_url: "",
+  },
+  {
+    title: "Task Management App",
+    description: "A collaborative project management tool with real-time updates and drag-and-drop.",
+    tags: ["Next.js", "TypeScript", "Prisma", "WebSocket"],
+    live_url: "#", github_url: "#", featured: true, image_url: "",
+  },
+  {
+    title: "AI Content Generator",
+    description: "An AI-powered tool that helps create marketing copy and blog posts.",
+    tags: ["React", "OpenAI", "Tailwind", "Vercel"],
+    live_url: "#", github_url: "#", featured: true, image_url: "",
+  },
+];
 
 const ProjectsSection = () => {
   const { sectionRef, contentRef } = useGsapScroll({ stagger: 0.12, y: 40 });
-  
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      description:
-        "A full-featured online store with cart, checkout, and payment integration. Built with React, Node.js, and Stripe.",
-      tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      liveUrl: "#",
-      githubUrl: "#",
-      featured: true,
-    },
-    {
-      title: "Task Management App",
-      description:
-        "A collaborative project management tool with real-time updates, drag-and-drop, and team features.",
-      tags: ["Next.js", "TypeScript", "Prisma", "WebSocket"],
-      liveUrl: "#",
-      githubUrl: "#",
-      featured: true,
-    },
-    {
-      title: "AI Content Generator",
-      description:
-        "An AI-powered tool that helps create marketing copy, blog posts, and social media content.",
-      tags: ["React", "OpenAI", "Tailwind", "Vercel"],
-      liveUrl: "#",
-      githubUrl: "#",
-      featured: true,
-    },
-    {
-      title: "Portfolio Template",
-      description:
-        "A customizable portfolio template for developers and designers with dark mode support.",
-      tags: ["React", "Tailwind CSS", "Framer Motion"],
-      liveUrl: "#",
-      githubUrl: "#",
-      featured: false,
-    },
-    {
-      title: "Weather Dashboard",
-      description:
-        "A beautiful weather app with 7-day forecasts, location search, and weather alerts.",
-      tags: ["Vue.js", "Weather API", "Charts"],
-      liveUrl: "#",
-      githubUrl: "#",
-      featured: false,
-    },
-    {
-      title: "Fitness Tracker",
-      description:
-        "Track workouts, set goals, and monitor progress with this comprehensive fitness companion.",
-      tags: ["React Native", "Firebase", "Charts"],
-      liveUrl: "#",
-      githubUrl: "#",
-      featured: false,
-    },
-  ];
+  const { data: dbProjects } = useProjects();
+
+  const projects = dbProjects && dbProjects.length > 0
+    ? dbProjects.map((p) => ({
+        title: p.title,
+        description: p.description,
+        tags: p.tags,
+        live_url: p.live_url,
+        github_url: p.github_url,
+        featured: p.featured,
+        image_url: p.image_url,
+      }))
+    : fallbackProjects;
 
   return (
     <section 
@@ -121,7 +99,7 @@ const ProjectsSection = () => {
                         className="flex-1"
                       >
                         <a
-                          href={project.liveUrl}
+                          href={project.live_url}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -131,7 +109,7 @@ const ProjectsSection = () => {
                       </Button>
                       <Button variant="outline" size="sm" asChild>
                         <a
-                          href={project.githubUrl}
+                          href={project.github_url}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -158,7 +136,7 @@ const ProjectsSection = () => {
                     <Folder className="w-10 h-10 text-primary/70" />
                     <div className="flex gap-2">
                       <a
-                        href={project.githubUrl}
+                        href={project.github_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-primary transition-colors"
@@ -166,7 +144,7 @@ const ProjectsSection = () => {
                         <Github className="w-5 h-5" />
                       </a>
                       <a
-                        href={project.liveUrl}
+                        href={project.live_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-primary transition-colors"
