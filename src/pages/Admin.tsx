@@ -159,24 +159,27 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Add Project</DialogTitle>
-          </DialogHeader>
+          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
+            <DialogHeader className="shrink-0">
+              <DialogTitle>Add Project</DialogTitle>
+            </DialogHeader>
+            <div className="overflow-y-auto flex-1 pr-1">
           <ProjectForm
             onSubmit={handleCreate}
             onCancel={() => setShowForm(false)}
             isLoading={createProject.isPending}
           />
+            </div>
         </DialogContent>
       </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
+          <DialogHeader className="shrink-0">
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
+          <div className="overflow-y-auto flex-1 pr-1">
           {editingProject && (
             <ProjectForm
               project={editingProject}
@@ -185,6 +188,7 @@ const Admin = () => {
               isLoading={updateProject.isPending}
             />
           )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
