@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Pencil, Trash2, Plus, LogOut, Star } from "lucide-react";
+import { Pencil, Trash2, Plus, LogOut, Star, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const Admin = () => {
@@ -102,7 +103,13 @@ const Admin = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Project Dashboard</h1>
+          <div className="flex items-center gap-4">
+            <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 text-sm">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Site
+            </Link>
+            <h1 className="text-xl font-bold text-foreground">Project Dashboard</h1>
+          </div>
           <Button variant="outline" size="sm" onClick={signOut}>
             <LogOut className="w-4 h-4 mr-2" />
             Sign Out
