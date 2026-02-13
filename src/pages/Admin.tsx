@@ -159,11 +159,11 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] !flex !flex-col">
+          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-hidden !flex !flex-col">
             <DialogHeader className="shrink-0">
               <DialogTitle>Add Project</DialogTitle>
             </DialogHeader>
-            <div className="overflow-y-auto flex-1 min-h-0 pr-1">
+            <div className="overflow-y-auto flex-1 min-h-0 pr-2 -mr-2">
           <ProjectForm
             onSubmit={handleCreate}
             onCancel={() => setShowForm(false)}
@@ -175,11 +175,11 @@ const Admin = () => {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] !flex !flex-col">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-hidden !flex !flex-col">
           <DialogHeader className="shrink-0">
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
-          <div className="overflow-y-auto flex-1 min-h-0 pr-1">
+          <div className="overflow-y-auto flex-1 min-h-0 pr-2 -mr-2">
           {editingProject && (
             <ProjectForm
               project={editingProject}
