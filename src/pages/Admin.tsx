@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Pencil, Trash2, Plus, LogOut, Star } from "lucide-react";
 import { toast } from "sonner";
 
@@ -163,13 +164,15 @@ const Admin = () => {
             <DialogHeader>
               <DialogTitle>Add Project</DialogTitle>
             </DialogHeader>
-            <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-2 -mr-2">
-          <ProjectForm
-            onSubmit={handleCreate}
-            onCancel={() => setShowForm(false)}
-            isLoading={createProject.isPending}
-          />
-            </div>
+            <ScrollArea className="max-h-[calc(85vh-8rem)]">
+              <div className="pr-4">
+                <ProjectForm
+                  onSubmit={handleCreate}
+                  onCancel={() => setShowForm(false)}
+                  isLoading={createProject.isPending}
+                />
+              </div>
+            </ScrollArea>
         </DialogContent>
       </Dialog>
 
@@ -179,16 +182,18 @@ const Admin = () => {
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
-          <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-2 -mr-2">
-          {editingProject && (
-            <ProjectForm
-              project={editingProject}
-              onSubmit={handleUpdate}
-              onCancel={() => setEditingProject(null)}
-              isLoading={updateProject.isPending}
-            />
-          )}
-          </div>
+          <ScrollArea className="max-h-[calc(85vh-8rem)]">
+            <div className="pr-4">
+              {editingProject && (
+                <ProjectForm
+                  project={editingProject}
+                  onSubmit={handleUpdate}
+                  onCancel={() => setEditingProject(null)}
+                  isLoading={updateProject.isPending}
+                />
+              )}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </div>
