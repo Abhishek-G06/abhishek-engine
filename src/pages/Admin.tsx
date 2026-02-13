@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Pencil, Trash2, Plus, LogOut, Star } from "lucide-react";
 import { toast } from "sonner";
 
@@ -160,40 +160,36 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-          <DialogContent className="max-w-lg w-[calc(100%-2rem)]">
-            <DialogHeader>
+          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col overflow-hidden">
+            <DialogHeader className="shrink-0">
               <DialogTitle>Add Project</DialogTitle>
             </DialogHeader>
-            <ScrollArea className="max-h-[calc(85vh-8rem)]">
-              <div className="pr-4">
-                <ProjectForm
-                  onSubmit={handleCreate}
-                  onCancel={() => setShowForm(false)}
-                  isLoading={createProject.isPending}
-                />
-              </div>
-            </ScrollArea>
+            <div className="flex-1 min-h-0 overflow-y-auto -webkit-overflow-scrolling-touch pr-1">
+              <ProjectForm
+                onSubmit={handleCreate}
+                onCancel={() => setShowForm(false)}
+                isLoading={createProject.isPending}
+              />
+            </div>
         </DialogContent>
       </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)]">
-          <DialogHeader>
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col overflow-hidden">
+          <DialogHeader className="shrink-0">
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
-          <ScrollArea className="max-h-[calc(85vh-8rem)]">
-            <div className="pr-4">
-              {editingProject && (
-                <ProjectForm
-                  project={editingProject}
-                  onSubmit={handleUpdate}
-                  onCancel={() => setEditingProject(null)}
-                  isLoading={updateProject.isPending}
-                />
-              )}
-            </div>
-          </ScrollArea>
+          <div className="flex-1 min-h-0 overflow-y-auto pr-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {editingProject && (
+              <ProjectForm
+                project={editingProject}
+                onSubmit={handleUpdate}
+                onCancel={() => setEditingProject(null)}
+                isLoading={updateProject.isPending}
+              />
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
