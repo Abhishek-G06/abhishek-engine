@@ -1,57 +1,65 @@
 
 
-## Fix: Dialog Touchpad Scrolling Blocked by Lenis Smooth Scroll
+## Fix: Lenis Blocks Scrolling Even When Stopped
 
-### Root Cause
+### Root Cause (Confirmed from Lenis Source Code)
 
-The issue is NOT in the dialog CSS. It's caused by **Lenis smooth scroll** (`src/components/SmoothScrollProvider.tsx`). Lenis intercepts all `wheel` and `touchpad` events globally when `smoothWheel: true` is set, consuming them before they can reach the dialog's `overflow-y-auto` container. This explains why:
+The MutationObserver approach (calling `lenis.stop()`) does NOT fix the problem because of a bug in Lenis's design:
 
-- Horizontal scroll works (Lenis only captures vertical wheel events)
-- Scrollbar dragging works (drag events bypass Lenis)
-- Vertical touchpad/mousewheel does NOT work (Lenis swallows these)
+When `lenis.stop()` is called, it sets an internal `_isStopped` flag. However, the wheel event listeners remain active with `{ passive: false }`. When a wheel event fires, Lenis's `onVirtualScroll` handler checks `this.isStopped` and **still calls `event.preventDefault()`** on the wheel event (line 632-636 in lenis.mjs). This means even when "stopped", Lenis actively blocks native scrolling.
+
+This is why the MutationObserver fix we already added has no effect.
 
 ### Solution
 
-Two changes are needed:
+Use Lenis's built-in `data-lenis-prevent` attribute. When Lenis encounters this attribute on any element in the event's composed path, it returns early from `onVirtualScroll` WITHOUT calling `preventDefault()` (line 628-631). This allows native scrolling to work.
 
-**1. Stop Lenis from scrolling when a dialog is open** (`src/components/SmoothScrollProvider.tsx`)
+Two changes:
 
-Add a MutationObserver that watches for the `data-scroll-locked` attribute on `<body>` (set by Radix's `react-remove-scroll` when a dialog opens). When detected, call `lenis.stop()` to pause Lenis event interception. When removed, call `lenis.start()` to resume.
+**1. Add `data-lenis-prevent` to DialogContent** (`src/components/ui/dialog.tsx`)
 
-```text
-useEffect(() => {
-  const lenis = new Lenis({ ... });
-  lenisRef.current = lenis;
+Add the `data-lenis-prevent` attribute directly on `DialogPrimitive.Content`. When Lenis sees this attribute on any ancestor of the wheel event target, it skips its scroll handling entirely, allowing native `overflow-y-auto` scrolling to work.
 
-  // Pause Lenis when Radix dialog opens (body gets data-scroll-locked)
-  const observer = new MutationObserver(() => {
-    if (document.body.hasAttribute('data-scroll-locked')) {
-      lenis.stop();
-    } else {
-      lenis.start();
-    }
-  });
-  observer.observe(document.body, { attributes: true, attributeFilter: ['data-scroll-locked'] });
+**2. Keep the MutationObserver as a secondary safeguard** (`src/components/SmoothScrollProvider.tsx`)
 
-  // ... rest of existing setup (scroll listener, raf loop) ...
-
-  return () => {
-    observer.disconnect();
-    cancelAnimationFrame(rafId);
-    lenis.destroy();
-  };
-}, []);
-```
-
-**2. Add touch-action safety to dialog** (`src/components/ui/dialog.tsx`)
-
-Add inline `style` with `touchAction: 'auto'` and `overscrollBehaviorY: 'contain'` on `DialogPrimitive.Content` as a defensive measure for mobile/Safari.
-
-### Why This Works
-
-Lenis hooks into the global `wheel` event listener with `{ passive: false }` and calls `preventDefault()` on it, which stops the browser from scrolling any element -- including the dialog. By calling `lenis.stop()` when a dialog is open, Lenis removes its event listeners, allowing native browser scrolling to work inside the dialog's `overflow-y-auto` container.
+The existing MutationObserver code can stay -- it prevents Lenis from scrolling the background page while a dialog is open. But the primary fix is `data-lenis-prevent`.
 
 ### Files Changed
 
-- `src/components/SmoothScrollProvider.tsx` -- Add MutationObserver to stop/start Lenis
-- `src/components/ui/dialog.tsx` -- Add defensive inline styles for touch-action
+**`src/components/ui/dialog.tsx`** -- Add `data-lenis-prevent` attribute to `DialogPrimitive.Content`:
+
+```text
+<DialogPrimitive.Content
+  ref={ref}
+  data-lenis-prevent          // <-- ADD THIS
+  className={cn(
+    "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ...",
+    "max-h-[85vh] overflow-y-auto",
+    className
+  )}
+  style={{
+    touchAction: 'auto',
+    overscrollBehaviorY: 'contain',
+    WebkitOverflowScrolling: 'touch',
+  }}
+  {...props}
+>
+```
+
+**`src/components/SmoothScrollProvider.tsx`** -- No changes needed. The existing MutationObserver code stays as-is for background scroll prevention.
+
+### Why This Works
+
+Lenis checks `event.composedPath()` for any element with the `data-lenis-prevent` attribute. When found, it immediately returns from `onVirtualScroll` without calling `event.preventDefault()`. This means:
+
+- The browser's native wheel/touchpad event handling takes over
+- The dialog's `overflow-y-auto` works as expected
+- Vertical AND horizontal scrolling both work
+- No Lenis code runs at all for events inside the dialog
+
+### Why Previous Fixes Failed
+
+- `lenis.stop()` -- Lenis still calls `preventDefault()` even when stopped
+- CSS changes (`touch-action`, `overflow-y-auto`) -- The issue was never CSS; it was JavaScript event interception
+- Wrapper div changes -- Same reason; Lenis intercepts at the event level before CSS can help
+
