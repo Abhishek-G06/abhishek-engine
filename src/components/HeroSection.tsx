@@ -179,7 +179,7 @@ const HeroSection = () => {
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6"
               style={{ visibility: "hidden" }}
             >
-              Jane Doe
+              Abhishek Gupta
             </h1>
             <h2
               data-animate="title"
@@ -226,7 +226,7 @@ const HeroSection = () => {
               style={{ visibility: "hidden" }}
             >
               <a
-                href="https://github.com"
+                href="https://github.com/Abhishek-G06"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
@@ -234,7 +234,7 @@ const HeroSection = () => {
                 <Github className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/abhishek-gupta-667229189/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
@@ -242,7 +242,7 @@ const HeroSection = () => {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="mailto:hello@example.com"
+                href="mailto:abhi2002gupta@gmail.com"
                 className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
               >
                 <Mail className="w-5 h-5" />
