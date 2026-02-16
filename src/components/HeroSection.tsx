@@ -261,7 +261,7 @@ const HeroSection = () => {
                 <img
                   src={heroAvatar}
                   alt="Jane Doe - Full Stack Developer"
-                  className="w-full h-full object-contain object-center scale-110"
+                  className="w-full h-full object-cover object-center scale-125"
                 />
               </div>
             </div>
