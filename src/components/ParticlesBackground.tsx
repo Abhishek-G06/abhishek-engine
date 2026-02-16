@@ -89,7 +89,8 @@ const ParticlesBackground = () => {
 
       const computedStyle = getComputedStyle(document.documentElement);
       const primaryHsl = computedStyle.getPropertyValue('--primary').trim();
-      const [baseHue] = primaryHsl.split(' ').map(v => parseFloat(v));
+      const parsedHue = parseFloat(primaryHsl.split(' ')[0]);
+      const baseHue = isNaN(parsedHue) ? 142 : parsedHue;
       const mouse = mouseRef.current;
       const interactionRadius = 150;
       const orbitRadius = 100;
