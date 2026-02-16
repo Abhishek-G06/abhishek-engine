@@ -21,6 +21,16 @@ const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
 
     lenisRef.current = lenis;
 
+    // Pause Lenis when Radix dialog opens (body gets data-scroll-locked)
+    const observer = new MutationObserver(() => {
+      if (document.body.hasAttribute('data-scroll-locked')) {
+        lenis.stop();
+      } else {
+        lenis.start();
+      }
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-scroll-locked'] });
+
     // Connect Lenis scroll to ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -38,6 +48,7 @@ const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
     }, 100);
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
