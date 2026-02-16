@@ -62,6 +62,7 @@ const ProjectForm = ({ project, onSubmit, onCancel, isLoading }: ProjectFormProp
       github_url: githubUrl,
       image_url: imageUrl,
       featured,
+      visible: project?.visible ?? true,
       display_order: displayOrder,
     });
   };
