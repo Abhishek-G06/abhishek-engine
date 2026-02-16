@@ -79,9 +79,9 @@ const ProjectsSection = () => {
                       <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : project.live_url && project.live_url !== "#" ? (
                       <img
-                        src={`https://image.thum.io/get/width/600/crop/400/${project.live_url}`}
+                        src={`https://image.thum.io/get/width/1280/noanimate/${project.live_url}`}
                         alt={project.title}
-                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-contain object-top group-hover:scale-105 transition-transform duration-500 bg-background"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     ) : (
