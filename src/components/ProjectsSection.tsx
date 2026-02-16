@@ -71,8 +71,12 @@ const ProjectsSection = () => {
                   data-scroll
                   className="group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1"
                 >
-                  <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
-                    <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
+                  <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center overflow-hidden">
+                    {project.image_url ? (
+                      <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
+                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-foreground mb-3">
