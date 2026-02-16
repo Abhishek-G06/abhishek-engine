@@ -73,7 +73,7 @@ const ProjectsSection = () => {
                   data-scroll
                   className="group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1"
                 >
-                  <div className="relative h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center overflow-hidden">
+                  <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center overflow-hidden">
                     {project.image_url ? (
                       <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : project.live_url && project.live_url !== "#" ? (
@@ -81,34 +81,11 @@ const ProjectsSection = () => {
                         src={`https://image.thum.io/get/width/600/crop/400/${project.live_url}`}
                         alt={project.title}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('flex', 'items-center', 'justify-center'); }}
                       />
                     ) : (
                       <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
                     )}
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-background/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-3 group-hover:translate-y-0">
-                      <h4 className="text-lg font-bold text-foreground mb-2 text-center">{project.title}</h4>
-                      <p className="text-sm text-muted-foreground text-center line-clamp-3 mb-3">{project.description}</p>
-                      <div className="flex gap-2">
-                        {project.live_url && project.live_url !== "#" && (
-                          <Button variant="default" size="sm" asChild>
-                            <a href={project.live_url} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                              Live
-                            </a>
-                          </Button>
-                        )}
-                        {project.github_url && project.github_url !== "#" && (
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={project.github_url} target="_blank" rel="noopener noreferrer">
-                              <Github className="w-3.5 h-3.5 mr-1.5" />
-                              Code
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-foreground mb-3">
@@ -166,7 +143,7 @@ const ProjectsSection = () => {
                 <div
                   key={project.title}
                   data-scroll
-                  className="group relative bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500 overflow-hidden"
+                  className="group bg-card p-6 rounded-xl border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-500"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <Folder className="w-10 h-10 text-primary/70" />
@@ -204,28 +181,6 @@ const ProjectsSection = () => {
                         {tag}
                       </span>
                     ))}
-                  </div>
-                  {/* Hover overlay for non-featured */}
-                  <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center p-5 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-3 group-hover:translate-y-0 rounded-xl">
-                    <p className="text-sm text-muted-foreground text-center mb-4">{project.description}</p>
-                    <div className="flex gap-2">
-                      {project.live_url && project.live_url !== "#" && (
-                        <Button variant="default" size="sm" asChild>
-                          <a href={project.live_url} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                            Live
-                          </a>
-                        </Button>
-                      )}
-                      {project.github_url && project.github_url !== "#" && (
-                        <Button variant="outline" size="sm" asChild>
-                          <a href={project.github_url} target="_blank" rel="noopener noreferrer">
-                            <Github className="w-3.5 h-3.5 mr-1.5" />
-                            Code
-                          </a>
-                        </Button>
-                      )}
-                    </div>
                   </div>
                 </div>
               ))}
