@@ -260,7 +260,7 @@ const HeroSection = () => {
               <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background">
                 <img
                   src={heroAvatar}
-                  alt="Jane Doe - Full Stack Developer"
+                  alt="Abhishek Gupta - Full Stack Developer"
                   className="w-full h-full object-contain object-center scale-110"
                 />
               </div>
