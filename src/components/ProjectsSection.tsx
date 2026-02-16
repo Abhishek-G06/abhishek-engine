@@ -30,15 +30,17 @@ const ProjectsSection = () => {
   const { data: dbProjects } = useProjects();
 
   const projects = dbProjects && dbProjects.length > 0
-    ? dbProjects.map((p) => ({
-        title: p.title,
-        description: p.description,
-        tags: p.tags,
-        live_url: p.live_url,
-        github_url: p.github_url,
-        featured: p.featured,
-        image_url: p.image_url,
-      }))
+    ? dbProjects
+        .filter((p) => p.visible)
+        .map((p) => ({
+          title: p.title,
+          description: p.description,
+          tags: p.tags,
+          live_url: p.live_url,
+          github_url: p.github_url,
+          featured: p.featured,
+          image_url: p.image_url,
+        }))
     : fallbackProjects;
 
   return (

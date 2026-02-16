@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GitHubImport from "@/components/admin/GitHubImport";
-import { Pencil, Trash2, Plus, LogOut, Star, ArrowLeft, Github } from "lucide-react";
+import { Pencil, Trash2, Plus, LogOut, Star, ArrowLeft, Github, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -155,8 +155,9 @@ const Admin = () => {
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-foreground truncate">{project.title}</h3>
+                      <h3 className={`font-semibold truncate ${project.visible ? 'text-foreground' : 'text-muted-foreground line-through'}`}>{project.title}</h3>
                       {project.featured && <Star className="w-4 h-4 text-primary fill-primary" />}
+                      {!project.visible && <span className="text-xs px-1.5 py-0.5 bg-muted text-muted-foreground rounded">Hidden</span>}
                     </div>
                     <p className="text-sm text-muted-foreground truncate">{project.description}</p>
                     <div className="flex gap-1 mt-1 flex-wrap">
@@ -168,6 +169,14 @@ const Admin = () => {
                     </div>
                   </div>
                   <div className="flex gap-2 ml-4 shrink-0">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => updateProject.mutateAsync({ id: project.id, visible: !project.visible }).then(() => toast.success(project.visible ? 'Hidden' : 'Visible'))}
+                      title={project.visible ? 'Hide from portfolio' : 'Show on portfolio'}
+                    >
+                      {project.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4 text-muted-foreground" />}
+                    </Button>
                     <Button variant="outline" size="icon" onClick={() => setEditingProject(project)}>
                       <Pencil className="w-4 h-4" />
                     </Button>

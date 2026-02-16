@@ -27,6 +27,7 @@ export type Database = {
           tags: string[]
           title: string
           updated_at: string
+          visible: boolean
         }
         Insert: {
           created_at?: string
@@ -40,6 +41,7 @@ export type Database = {
           tags?: string[]
           title: string
           updated_at?: string
+          visible?: boolean
         }
         Update: {
           created_at?: string
@@ -53,6 +55,7 @@ export type Database = {
           tags?: string[]
           title?: string
           updated_at?: string
+          visible?: boolean
         }
         Relationships: []
       }

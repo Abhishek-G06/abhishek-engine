@@ -9,6 +9,7 @@ export interface Project {
   live_url: string;
   github_url: string;
   featured: boolean;
+  visible: boolean;
   image_url: string;
   display_order: number;
   created_at: string;

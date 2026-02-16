@@ -73,6 +73,7 @@ const GitHubImport = ({ onImport, isImporting }: GitHubImportProps) => {
         github_url: r.html_url,
         image_url: "",
         featured: r.stargazers_count > 5,
+        visible: true,
         display_order: i,
       }));
     onImport(projects);
