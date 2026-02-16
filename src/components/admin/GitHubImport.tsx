@@ -102,7 +102,8 @@ const GitHubImport = ({ onImport, isImporting }: GitHubImportProps) => {
           <p className="text-sm text-muted-foreground">
             {repos.length} repos found — select which to import ({selected.size} selected)
           </p>
-          <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+          <div className="max-h-[50vh] overflow-y-auto space-y-2 pr-1 overscroll-contain"
+               style={{ WebkitOverflowScrolling: 'touch' }}>
             {repos.map((repo) => (
               <Card
                 key={repo.id}
