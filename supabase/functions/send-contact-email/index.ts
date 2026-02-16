@@ -1,6 +1,6 @@
 import { corsHeaders } from "../_shared/cors.ts";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
+const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY")!;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -33,18 +33,21 @@ Deno.serve(async (req) => {
       );
     }
 
+    const brevoHeaders = {
+      "Content-Type": "application/json",
+      "api-key": BREVO_API_KEY,
+    };
+
     // Send notification to you
-    const notifyRes = await fetch("https://api.resend.com/emails", {
+    const notifyRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
+      headers: brevoHeaders,
       body: JSON.stringify({
-        from: "Portfolio Contact <onboarding@resend.dev>",
-        to: ["abhi2002gupta@gmail.com"],
+        sender: { name: "Portfolio Contact", email: "abhi2002gupta@gmail.com" },
+        to: [{ email: "abhi2002gupta@gmail.com", name: "Abhishek Gupta" }],
+        replyTo: { email, name },
         subject: `Portfolio Contact: ${subject}`,
-        html: `
+        htmlContent: `
           <h2>New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
@@ -52,14 +55,12 @@ Deno.serve(async (req) => {
           <p><strong>Message:</strong></p>
           <p>${message.replace(/\n/g, "<br>")}</p>
         `,
-        reply_to: email,
       }),
     });
 
-    const notifyData = await notifyRes.json();
-
     if (!notifyRes.ok) {
-      console.error("Resend error:", notifyData);
+      const errData = await notifyRes.json();
+      console.error("Brevo notify error:", errData);
       return new Response(
         JSON.stringify({ error: "Failed to send email" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -79,14 +80,12 @@ Deno.serve(async (req) => {
           <tr>
             <td align="center">
               <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
-                <!-- Header -->
                 <tr>
                   <td style="background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:40px 40px 32px;text-align:center;">
                     <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-0.5px;">Thank You, ${name}! ✨</h1>
                     <p style="margin:8px 0 0;color:rgba(255,255,255,0.85);font-size:15px;">Your message has been received</p>
                   </td>
                 </tr>
-                <!-- Body -->
                 <tr>
                   <td style="padding:36px 40px;">
                     <p style="margin:0 0 20px;color:#27272a;font-size:15px;line-height:1.7;">
@@ -95,7 +94,6 @@ Deno.serve(async (req) => {
                     <p style="margin:0 0 20px;color:#3f3f46;font-size:15px;line-height:1.7;">
                       Thanks for reaching out! I've received your message and truly appreciate you taking the time to connect. I'll review your inquiry and get back to you as soon as possible — typically within <strong>24–48 hours</strong>.
                     </p>
-                    <!-- Message Summary -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb;border-radius:12px;border:1px solid #e4e4e7;margin:24px 0;">
                       <tr>
                         <td style="padding:24px;">
@@ -110,13 +108,11 @@ Deno.serve(async (req) => {
                     </p>
                   </td>
                 </tr>
-                <!-- Divider -->
                 <tr>
                   <td style="padding:0 40px;">
                     <hr style="border:none;border-top:1px solid #e4e4e7;margin:0;">
                   </td>
                 </tr>
-                <!-- Footer -->
                 <tr>
                   <td style="padding:24px 40px 32px;text-align:center;">
                     <p style="margin:0 0 12px;color:#71717a;font-size:13px;">Connect with me</p>
@@ -142,21 +138,22 @@ Deno.serve(async (req) => {
       </html>
     `;
 
-    // Fire and forget — don't block the response on auto-reply
-    await fetch("https://api.resend.com/emails", {
+    const autoReplyRes = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
+      headers: brevoHeaders,
       body: JSON.stringify({
-        from: "Abhishek Gupta <onboarding@resend.dev>",
-        to: [email],
+        sender: { name: "Abhishek Gupta", email: "abhi2002gupta@gmail.com" },
+        to: [{ email, name }],
+        replyTo: { email: "abhi2002gupta@gmail.com", name: "Abhishek Gupta" },
         subject: `Thanks for reaching out, ${name}! 🙌`,
-        html: autoReplyHtml,
-        reply_to: "abhi2002gupta@gmail.com",
+        htmlContent: autoReplyHtml,
       }),
     });
+
+    if (!autoReplyRes.ok) {
+      const errData = await autoReplyRes.json();
+      console.error("Brevo auto-reply error:", errData);
+    }
 
     return new Response(
       JSON.stringify({ success: true }),
