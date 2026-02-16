@@ -1,50 +1,41 @@
 
 
-## Fix: GitHub Import Dialog Not Scrollable in Safari
+## Fix: All Admin Dialogs Not Scrollable (Root Cause)
 
-### Root Cause
-The GitHub Import dialog's repo list in `GitHubImport.tsx` uses `max-h-72 overflow-y-auto` (only 288px tall). Safari hides scrollbar indicators by default and sometimes fails to register trackpad/touch scroll on small nested scrollable containers inside fixed-position dialogs.
+### Problem
+The `DialogContent` component in `src/components/ui/dialog.tsx` has `grid` hardcoded in its base CSS. When Admin.tsx passes `flex flex-col`, both `grid` and `flex` end up in the final class list. CSS `grid` takes precedence, causing the dialog to expand to fit its content rather than constraining height and enabling scroll. This is why trackpad/mousewheel scrolling doesn't work -- there's nothing to scroll because the container grows instead of overflowing.
 
-### Solution
+### Solution (One-time fix, affects all three dialogs)
 
-**File: `src/components/admin/GitHubImport.tsx`**
+**File: `src/components/ui/dialog.tsx`** (line 39)
 
-1. Increase the scrollable area height from `max-h-72` to `max-h-[50vh]` so there's more visible content and a more natural scroll region.
-2. Add Safari-specific CSS to force scrollbar visibility: add `[&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 [&::-webkit-scrollbar-thumb]:rounded-full` to ensure the scrollbar is always visible in WebKit browsers (Safari/Chrome).
-3. Add `-webkit-overflow-scrolling: touch` via the class `webkit-overflow-scrolling-touch` or inline style to enable momentum scrolling on Safari.
+Replace `grid` with `flex flex-col` in the base DialogContent class so it natively supports constrained height and overflow scrolling:
+
+```tsx
+// Before
+"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 ..."
+
+// After
+"fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 ..."
+```
 
 **File: `src/pages/Admin.tsx`**
 
-4. Wrap the `GitHubImport` component inside the same `overflow-y-auto max-h-[calc(85vh-8rem)]` div pattern used for the other two dialogs, ensuring the entire dialog content is scrollable if it exceeds viewport height.
+Remove the redundant `flex flex-col` from all three DialogContent className props since it's now in the base component. The `max-h-[85vh]` stays to cap the dialog height. The inner `overflow-y-auto flex-1 min-h-0` divs remain unchanged -- they will now work correctly because the parent is actually a flex container.
 
-### Technical Details
-
-Change in `GitHubImport.tsx` (line 105):
 ```tsx
-// Before
-<div className="max-h-72 overflow-y-auto space-y-2 pr-1">
-
-// After
-<div className="max-h-[50vh] overflow-y-auto space-y-2 pr-1 overscroll-contain"
-     style={{ WebkitOverflowScrolling: 'touch' }}>
+// All three dialogs simplified to:
+<DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
 ```
 
-Change in `Admin.tsx` (GitHub Import Dialog):
-```tsx
-// Before
-<GitHubImport
-  onImport={handleGitHubImport}
-  isImporting={createProject.isPending}
-/>
+No other files need changes. This is the single root cause behind all three dialogs failing to scroll.
 
-// After
-<div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
-  <GitHubImport
-    onImport={handleGitHubImport}
-    isImporting={createProject.isPending}
-  />
-</div>
-```
+### Why This Works
+- `flex flex-col` on the dialog container means children stack vertically
+- `max-h-[85vh]` caps the total dialog height
+- The inner `div` with `overflow-y-auto flex-1 min-h-0` fills remaining space and scrolls when content overflows
+- Trackpad, mousewheel, arrow keys, and touch all work natively because the browser handles a standard overflowing div
 
-This ensures momentum scrolling works on Safari, the scrollbar is visible, and the dialog content can scroll properly on all devices.
+### Impact
+This changes the base Dialog component. All dialogs across the app will use flex layout instead of grid. Since dialogs typically stack content vertically, this is the correct default. Any dialog that needs grid can override it via className.
 
