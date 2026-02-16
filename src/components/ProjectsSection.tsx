@@ -71,7 +71,7 @@ const ProjectsSection = () => {
                 <div
                   key={project.title}
                   data-scroll
-                  className="group relative bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 aspect-[16/10]"
+                  className="group relative bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 aspect-[4/3]"
                 >
                   {/* Full-size image background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
