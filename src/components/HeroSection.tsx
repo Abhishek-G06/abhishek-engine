@@ -257,7 +257,7 @@ const HeroSection = () => {
             style={{ visibility: "hidden" }}
           >
             <div className="relative">
-              <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background">
+              <div className="w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background">
                 <img
                   src={heroAvatar}
                   alt="Abhishek Gupta - Full Stack Developer"
