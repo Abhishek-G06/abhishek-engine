@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import heroAvatar from "@/assets/hero-avatar.png";
+import heroAvatarAnimated from "@/assets/hero-avatar1.png";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -256,12 +257,17 @@ const HeroSection = () => {
             className="flex-shrink-0 lg:order-first"
             style={{ visibility: "hidden" }}
           >
-            <div className="relative">
-              <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background">
+            <div className="relative group">
+              <div className="w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background relative">
                 <img
                   src={heroAvatar}
                   alt="Abhishek Gupta - Full Stack Developer"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500 ease-in-out group-hover:opacity-0"
+                />
+                <img
+                  src={heroAvatarAnimated}
+                  alt="Abhishek Gupta - Animated Avatar"
+                  className="w-full h-full object-cover object-top absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100"
                 />
               </div>
             </div>
