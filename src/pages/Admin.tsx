@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import GitHubImport from "@/components/admin/GitHubImport";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
@@ -241,15 +241,13 @@ const Admin = () => {
             <DialogHeader>
               <DialogTitle>Add Project</DialogTitle>
             </DialogHeader>
-            <ScrollArea className="max-h-[calc(85vh-8rem)]">
-              <div className="pr-4">
+            <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
                 <ProjectForm
                   onSubmit={handleCreate}
                   onCancel={() => setShowForm(false)}
                   isLoading={createProject.isPending}
                 />
-              </div>
-            </ScrollArea>
+            </div>
         </DialogContent>
       </Dialog>
 
@@ -259,8 +257,7 @@ const Admin = () => {
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
-          <ScrollArea className="max-h-[calc(85vh-8rem)]">
-            <div className="pr-4">
+          <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
               {editingProject && (
                 <ProjectForm
                   project={editingProject}
@@ -269,8 +266,7 @@ const Admin = () => {
                   isLoading={updateProject.isPending}
                 />
               )}
-            </div>
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
       {/* GitHub Import Dialog */}
