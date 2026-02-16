@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Pencil, Trash2, Plus, LogOut, Star, ArrowLeft } from "lucide-react";
+import GitHubImport from "@/components/admin/GitHubImport";
+import { Pencil, Trash2, Plus, LogOut, Star, ArrowLeft, Github } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -24,6 +25,7 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showGitHub, setShowGitHub] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +53,18 @@ const Admin = () => {
       await updateProject.mutateAsync({ id: editingProject.id, ...data });
       toast.success("Project updated");
       setEditingProject(null);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleGitHubImport = async (projects: ProjectInsert[]) => {
+    try {
+      for (const p of projects) {
+        await createProject.mutateAsync(p);
+      }
+      toast.success(`Imported ${projects.length} project(s)`);
+      setShowGitHub(false);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -120,10 +134,16 @@ const Admin = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <p className="text-muted-foreground">{projects?.length ?? 0} projects</p>
-          <Button onClick={() => setShowForm(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Project
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setShowGitHub(true)}>
+              <Github className="w-4 h-4 mr-2" />
+              Import from GitHub
+            </Button>
+            <Button onClick={() => setShowForm(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Project
+            </Button>
+          </div>
         </div>
 
         {isLoading ? (
@@ -201,6 +221,18 @@ const Admin = () => {
               )}
             </div>
           </ScrollArea>
+        </DialogContent>
+      </Dialog>
+      {/* GitHub Import Dialog */}
+      <Dialog open={showGitHub} onOpenChange={setShowGitHub}>
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)]">
+          <DialogHeader>
+            <DialogTitle>Import from GitHub</DialogTitle>
+          </DialogHeader>
+          <GitHubImport
+            onImport={handleGitHubImport}
+            isImporting={createProject.isPending}
+          />
         </DialogContent>
       </Dialog>
     </div>
