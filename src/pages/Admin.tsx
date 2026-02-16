@@ -275,10 +275,12 @@ const Admin = () => {
           <DialogHeader>
             <DialogTitle>Import from GitHub</DialogTitle>
           </DialogHeader>
-          <GitHubImport
-            onImport={handleGitHubImport}
-            isImporting={createProject.isPending}
-          />
+          <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
+            <GitHubImport
+              onImport={handleGitHubImport}
+              isImporting={createProject.isPending}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
