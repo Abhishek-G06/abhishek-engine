@@ -237,11 +237,11 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-          <DialogContent className="max-w-lg w-[calc(100%-2rem)]">
+          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
             <DialogHeader>
               <DialogTitle>Add Project</DialogTitle>
             </DialogHeader>
-            <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
+            <div className="overflow-y-auto flex-1 min-h-0 pr-4">
                 <ProjectForm
                   onSubmit={handleCreate}
                   onCancel={() => setShowForm(false)}
@@ -253,11 +253,11 @@ const Admin = () => {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)]">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
-          <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
+          <div className="overflow-y-auto flex-1 min-h-0 pr-4">
               {editingProject && (
                 <ProjectForm
                   project={editingProject}
@@ -271,11 +271,11 @@ const Admin = () => {
       </Dialog>
       {/* GitHub Import Dialog */}
       <Dialog open={showGitHub} onOpenChange={setShowGitHub}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)]">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Import from GitHub</DialogTitle>
           </DialogHeader>
-          <div className="overflow-y-auto max-h-[calc(85vh-8rem)] pr-4">
+          <div className="overflow-y-auto flex-1 min-h-0 pr-1">
             <GitHubImport
               onImport={handleGitHubImport}
               isImporting={createProject.isPending}
