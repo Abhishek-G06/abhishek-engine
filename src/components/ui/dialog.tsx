@@ -40,6 +40,11 @@ const DialogContent = React.forwardRef<
         "max-h-[85vh] overflow-y-auto",
         className
       )}
+      style={{
+        touchAction: 'auto',
+        overscrollBehaviorY: 'contain',
+        WebkitOverflowScrolling: 'touch',
+      }}
       {...props}
     >
       {children}
