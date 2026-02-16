@@ -71,9 +71,10 @@ const ProjectsSection = () => {
                 <div
                   key={project.title}
                   data-scroll
-                  className="group bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1"
+                  className="group relative bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 aspect-[4/3]"
                 >
-                  <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center overflow-hidden">
+                  {/* Full-size image background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
                     {project.image_url ? (
                       <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : project.live_url && project.live_url !== "#" ? (
@@ -81,20 +82,22 @@ const ProjectsSection = () => {
                         src={`https://image.thum.io/get/width/600/crop/400/${project.live_url}`}
                         alt={project.title}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('flex', 'items-center', 'justify-center'); }}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     ) : (
                       <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
                     )}
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">
+
+                  {/* Hover overlay with details */}
+                  <div className="absolute inset-0 bg-background/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center p-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                       {project.title}
                     </h3>
-                    <p className="text-muted-foreground mb-4 line-clamp-2">
+                    <p className="text-muted-foreground mb-4 line-clamp-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
                       {project.description}
                     </p>
-                    <div className="flex flex-wrap gap-2 mb-5">
+                    <div className="flex flex-wrap gap-2 mb-5 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
@@ -104,7 +107,7 @@ const ProjectsSection = () => {
                         </span>
                       ))}
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
                       <Button
                         variant="default"
                         size="sm"
