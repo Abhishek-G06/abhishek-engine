@@ -71,21 +71,21 @@ const ProjectsSection = () => {
                 <div
                   key={project.title}
                   data-scroll
-                  className="group relative bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 aspect-[4/3]"
+                  className="group relative bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 aspect-[16/10]"
                 >
                   {/* Full-size image background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-background flex items-start justify-center">
                     {project.image_url ? (
                       <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : project.live_url && project.live_url !== "#" ? (
                       <img
                         src={`https://image.thum.io/get/width/1280/noanimate/${project.live_url}`}
                         alt={project.title}
-                        className="w-full h-full object-contain object-top group-hover:scale-105 transition-transform duration-500 bg-background"
+                        className="w-full h-auto object-top group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     ) : (
-                      <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
+                      <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300 mt-12" />
                     )}
                   </div>
 
