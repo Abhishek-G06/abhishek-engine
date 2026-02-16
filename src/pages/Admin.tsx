@@ -237,7 +237,7 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
+          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
             <DialogHeader>
               <DialogTitle>Add Project</DialogTitle>
             </DialogHeader>
@@ -253,7 +253,7 @@ const Admin = () => {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
@@ -271,7 +271,7 @@ const Admin = () => {
       </Dialog>
       {/* GitHub Import Dialog */}
       <Dialog open={showGitHub} onOpenChange={setShowGitHub}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] flex flex-col">
+        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
           <DialogHeader>
             <DialogTitle>Import from GitHub</DialogTitle>
           </DialogHeader>
