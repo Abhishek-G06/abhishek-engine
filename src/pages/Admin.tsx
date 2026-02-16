@@ -237,50 +237,45 @@ const Admin = () => {
 
       {/* Create Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
-          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
-            <DialogHeader>
-              <DialogTitle>Add Project</DialogTitle>
-            </DialogHeader>
-            <div className="overflow-y-auto flex-1 min-h-0 pr-4">
-                <ProjectForm
-                  onSubmit={handleCreate}
-                  onCancel={() => setShowForm(false)}
-                  isLoading={createProject.isPending}
-                />
-            </div>
+        <DialogContent className="w-[calc(100%-2rem)]">
+          <DialogHeader>
+            <DialogTitle>Add Project</DialogTitle>
+          </DialogHeader>
+          <ProjectForm
+            onSubmit={handleCreate}
+            onCancel={() => setShowForm(false)}
+            isLoading={createProject.isPending}
+          />
         </DialogContent>
       </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={!!editingProject} onOpenChange={(open) => !open && setEditingProject(null)}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
+        <DialogContent className="w-[calc(100%-2rem)]">
           <DialogHeader>
             <DialogTitle>Edit Project</DialogTitle>
           </DialogHeader>
-          <div className="overflow-y-auto flex-1 min-h-0 pr-4">
-              {editingProject && (
-                <ProjectForm
-                  project={editingProject}
-                  onSubmit={handleUpdate}
-                  onCancel={() => setEditingProject(null)}
-                  isLoading={updateProject.isPending}
-                />
-              )}
-          </div>
+          {editingProject && (
+            <ProjectForm
+              project={editingProject}
+              onSubmit={handleUpdate}
+              onCancel={() => setEditingProject(null)}
+              isLoading={updateProject.isPending}
+            />
+          )}
         </DialogContent>
       </Dialog>
+
       {/* GitHub Import Dialog */}
       <Dialog open={showGitHub} onOpenChange={setShowGitHub}>
-        <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh]">
+        <DialogContent className="w-[calc(100%-2rem)]">
           <DialogHeader>
             <DialogTitle>Import from GitHub</DialogTitle>
           </DialogHeader>
-          <div className="overflow-y-auto flex-1 min-h-0 pr-1">
-            <GitHubImport
-              onImport={handleGitHubImport}
-              isImporting={createProject.isPending}
-            />
-          </div>
+          <GitHubImport
+            onImport={handleGitHubImport}
+            isImporting={createProject.isPending}
+          />
         </DialogContent>
       </Dialog>
     </div>
