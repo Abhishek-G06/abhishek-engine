@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter } from "lucide-react";
 import { useGsapScroll } from "@/hooks/use-gsap-scroll";
 import ParallaxBackground from "@/components/ParallaxBackground";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactSection = () => {
   const { sectionRef, contentRef } = useGsapScroll({ stagger: 0.1, y: 30 });
@@ -28,8 +29,19 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const { data, error } = await supabase.functions.invoke("send-contact-email", {
+      body: formData,
+    });
+
+    if (error) {
+      toast({
+        title: "Failed to send message",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
     toast({
       title: "Message sent!",
