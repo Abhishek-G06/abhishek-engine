@@ -76,6 +76,13 @@ const ProjectsSection = () => {
                   <div className="h-48 bg-gradient-to-br from-primary/20 via-accent/30 to-primary/10 flex items-center justify-center overflow-hidden">
                     {project.image_url ? (
                       <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : project.live_url && project.live_url !== "#" ? (
+                      <img
+                        src={`https://image.thum.io/get/width/600/crop/400/${project.live_url}`}
+                        alt={project.title}
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('flex', 'items-center', 'justify-center'); }}
+                      />
                     ) : (
                       <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
                     )}
