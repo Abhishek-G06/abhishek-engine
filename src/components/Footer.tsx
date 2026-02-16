@@ -50,7 +50,7 @@ const Footer = () => {
         <div className="mt-8 pt-8 border-t border-border text-center">
           <div className="flex flex-col items-center gap-2">
             <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
-              © {currentYear} Jane Doe. Made with{" "}
+              © {currentYear} Abhishek Gupta. Made with{" "}
               <Heart className="w-4 h-4 text-destructive fill-destructive" /> All
               rights reserved.
             </p>

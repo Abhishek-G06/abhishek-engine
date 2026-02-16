@@ -44,27 +44,27 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@example.com",
-      href: "mailto:hello@example.com",
+      value: "abhi2002gupta@gmail.com",
+      href: "mailto:abhi2002gupta@gmail.com",
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "San Francisco, CA",
+      value: "New Delhi, IN",
       href: "#",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "+91 7355985582",
+      href: "tel:+917355985582",
     },
   ];
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
+    { icon: Github, href: "https://github.com/Abhishek-G06", label: "GitHub" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/abhishek-gupta-667229189/", label: "LinkedIn" },
+    { icon: Twitter, href: "https://x.com/23Abhishek06", label: "Twitter" },
   ];
 
   return (
@@ -174,7 +174,7 @@ const ContactSection = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="john@example.com"
+                      placeholder="mail@example.com"
                       required
                       className="bg-background"
                     />

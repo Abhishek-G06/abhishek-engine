@@ -13,16 +13,16 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Jane Doe | Full Stack Developer & Designer</title>
+        <title>Abhishek Gupta | Full Stack Developer & Designer</title>
         <meta
           name="description"
-          content="Portfolio of Jane Doe, a full-stack developer specializing in React, TypeScript, and modern web technologies. View my projects and get in touch."
+          content="Portfolio of Abhishek Gupta, a full-stack developer specializing in React, TypeScript, and modern web technologies. View my projects and get in touch."
         />
         <meta
           name="keywords"
           content="web developer, full stack developer, react developer, portfolio, frontend developer"
         />
-        <link rel="canonical" href="https://example.com" />
+        <link rel="canonical" href="https://abhishek-engine.lovable.app" />
       </Helmet>
 
       <div className="min-h-screen bg-background relative">
