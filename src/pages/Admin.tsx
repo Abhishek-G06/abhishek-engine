@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from "@/hooks/use-projects";
 import type { Project, ProjectInsert } from "@/hooks/use-projects";
@@ -14,7 +14,7 @@ import GitHubImport from "@/components/admin/GitHubImport";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { Plus, LogOut, ArrowLeft, Github } from "lucide-react";
+import { Plus, LogOut, ArrowLeft, Github, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -30,6 +30,7 @@ const Admin = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showGitHub, setShowGitHub] = useState(false);
+  const [search, setSearch] = useState("");
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -61,6 +62,17 @@ const Admin = () => {
     await updateProject.mutateAsync({ id: project.id, visible: !project.visible });
     toast.success(project.visible ? "Hidden" : "Visible");
   };
+
+  const filteredProjects = useMemo(() => {
+    if (!projects) return [];
+    const query = search.toLowerCase();
+    if (!query) return projects;
+    return projects.filter((p) =>
+      p.title.toLowerCase().includes(query) ||
+      p.description.toLowerCase().includes(query) ||
+      p.tags?.some((t) => t.toLowerCase().includes(query))
+    );
+  }, [projects, search]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,9 +179,17 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <p className="text-muted-foreground">{projects?.length ?? 0} projects</p>
-          <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search projects..."
+              className="pl-9"
+            />
+          </div>
+          <div className="flex gap-2 shrink-0">
             <Button variant="outline" onClick={() => setShowGitHub(true)}>
               <Github className="w-4 h-4 mr-2" />
               Import from GitHub
@@ -191,11 +211,11 @@ const Admin = () => {
             modifiers={[restrictToVerticalAxis]}
           >
             <SortableContext
-              items={projects?.map((p) => p.id) ?? []}
+              items={filteredProjects.map((p) => p.id)}
               strategy={verticalListSortingStrategy}
             >
               <div className="grid gap-4">
-                {projects?.map((project) => (
+                {filteredProjects.map((project) => (
                   <SortableProjectCard
                     key={project.id}
                     project={project}
@@ -204,8 +224,10 @@ const Admin = () => {
                     onToggleVisibility={handleToggleVisibility}
                   />
                 ))}
-                {projects?.length === 0 && (
-                  <p className="text-center text-muted-foreground py-12">No projects yet. Add your first one!</p>
+                {filteredProjects.length === 0 && (
+                  <p className="text-center text-muted-foreground py-12">
+                    {search ? "No projects match your search." : "No projects yet. Add your first one!"}
+                  </p>
                 )}
               </div>
             </SortableContext>
