@@ -1,9 +1,26 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ExternalLink, Github, Folder } from "lucide-react";
 import { useGsapScroll } from "@/hooks/use-gsap-scroll";
 import ParallaxBackground from "@/components/ParallaxBackground";
 import { useProjects } from "@/hooks/use-projects";
 import { useLanguage } from "@/i18n/LanguageContext";
+
+const ProjectImage = ({ src, alt }: { src: string; alt: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
+      <img
+        src={src}
+        alt={alt}
+        className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
+        onLoad={() => setLoaded(true)}
+      />
+    </>
+  );
+};
 
 const fallbackProjects = [
   {
@@ -77,7 +94,7 @@ const ProjectsSection = () => {
                   {/* Full-size image background */}
                   <div className="absolute inset-0 bg-background flex items-center justify-center">
                     {project.image_url ? (
-                      <img src={project.image_url} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <ProjectImage src={project.image_url} alt={project.title} />
                     ) : (
                       <Folder className="w-16 h-16 text-primary/60 group-hover:scale-110 transition-transform duration-300" />
                     )}
