@@ -1,83 +1,49 @@
-# Multi-Language Support
+
+# Smooth Language Transition Animation
 
 ## Overview
+Add a fade-out/fade-in transition effect when switching languages, so text doesn't just snap to the new language but smoothly crossfades.
 
-Add a language switcher to the navbar supporting 4 languages: English, Japanese, Spanish, and German. All static text across the site will be translatable via a lightweight custom i18n system (no heavy library needed for a portfolio site).
+## Approach
+Use a CSS-based transition on the main content area. When the language changes, the `LanguageProvider` will briefly set a `isTransitioning` state to true, which adds a CSS class that fades content out. After a short delay, the language updates and content fades back in.
 
-## Languages
+## Changes
 
-- English (EN) -- default
-- Japanese (JA)
-- Spanish (ES)
-- German (DE)
+### 1. Update `src/i18n/LanguageContext.tsx`
+- Add an `isTransitioning` boolean to context
+- When `setLanguage` is called, set `isTransitioning = true`, wait ~150ms, update the language, then set `isTransitioning = false` after another ~150ms
 
-## How It Works
+### 2. Update `src/App.tsx`
+- Wrap the main app content in a div that reads `isTransitioning` from context and applies an opacity/transition CSS class
 
-1. A new `LanguageContext` provider will store the current language and expose a `t()` translation function.
-2. A translations file will map every piece of UI text to all 4 languages.
-3. A `LanguageSwitcher` dropdown component (using the existing dropdown-menu UI) will sit in the navbar next to the theme toggle, showing a globe icon with a compact language code.
-4. The selected language persists in `localStorage`.
-
-## What Changes
-
-### New Files
-
-- `**src/i18n/translations.ts**` -- All translatable strings keyed by section (hero, about, skills, contact, navbar, footer).
-- `**src/i18n/LanguageContext.tsx**` -- React context providing `language`, `setLanguage`, and `t(key)`.
-- `**src/components/LanguageSwitcher.tsx**` -- Globe icon dropdown with 4 language options.
-
-### Modified Files
-
-- `**src/App.tsx**` -- Wrap app with `LanguageProvider`.
-- `**src/components/Navbar.tsx**` -- Add `LanguageSwitcher` next to `ThemeToggle`.
-- `**src/components/HeroSection.tsx**` -- Replace hardcoded strings with `t()` calls.
-- `**src/components/AboutSection.tsx**` -- Same.
-- `**src/components/SkillsSection.tsx**` -- Same.
-- `**src/components/ContactSection.tsx**` -- Same (labels, placeholders, headings).
-- `**src/components/Footer.tsx**` -- Same.
+### 3. Update `src/index.css`
+- Add a utility class for the language transition (e.g., `.lang-transitioning` with `opacity: 0` and a CSS transition on opacity ~150ms)
 
 ## Technical Details
 
-### Translation keys structure (example)
-
+**LanguageContext changes:**
 ```typescript
-const translations = {
-  en: {
-    "hero.greeting": "Hello, I'm",
-    "hero.title": "Full Stack Developer & Designer",
-    "hero.description": "I craft beautiful, functional digital experiences...",
-    "hero.viewWork": "View My Work",
-    "hero.contactMe": "Contact Me",
-    "nav.about": "About",
-    "nav.skills": "Skills",
-    "nav.projects": "Projects",
-    "nav.contact": "Contact",
-    "nav.getInTouch": "Get in Touch",
-    // ... all other strings
-  },
-  ja: { /* Japanese translations */ },
-  es: { /* Spanish translations */ },
-  de: { /* German translations */ },
-};
+// New state
+const [isTransitioning, setIsTransitioning] = useState(false);
+
+// Updated setLanguage
+const setLanguage = useCallback((lang: Language) => {
+  if (lang === language) return;
+  setIsTransitioning(true);
+  setTimeout(() => {
+    setLanguageState(lang);
+    localStorage.setItem("portfolio-language", lang);
+    setTimeout(() => setIsTransitioning(false), 150);
+  }, 150);
+}, [language]);
 ```
 
-### LanguageSwitcher component
-
-- Uses the existing `DropdownMenu` component
-- Shows a `Globe` icon (from lucide-react) with the current language code
-- Lists all 4 languages with their native names (e.g., "日本語", "Español", "हिन्दी")
-- Saves selection to `localStorage`
-
-### Context usage
-
-```typescript
-const { t } = useLanguage();
-// In JSX:
-<p>{t("hero.greeting")}</p>
+**App.tsx wrapper:**
+```tsx
+// A small wrapper component inside LanguageProvider that reads context
+<div className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+  {children}
+</div>
 ```
 
-## Notes
-
-- Skill names (React, TypeScript, etc.) and the portfolio owner's name will NOT be translated -- they stay in English.
-- Contact info (email, phone, address) stays as-is.
-- The language switcher will be responsive and work on both desktop and mobile nav.
+This creates a quick 150ms fade-out, language swap, then 150ms fade-in -- a subtle 300ms total transition that feels polished without being slow.
