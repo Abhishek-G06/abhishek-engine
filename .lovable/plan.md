@@ -1,65 +1,83 @@
+# Multi-Language Support
 
+## Overview
 
-## Fix: Lenis Blocks Scrolling Even When Stopped
+Add a language switcher to the navbar supporting 4 languages: English, Japanese, Spanish, and German. All static text across the site will be translatable via a lightweight custom i18n system (no heavy library needed for a portfolio site).
 
-### Root Cause (Confirmed from Lenis Source Code)
+## Languages
 
-The MutationObserver approach (calling `lenis.stop()`) does NOT fix the problem because of a bug in Lenis's design:
+- English (EN) -- default
+- Japanese (JA)
+- Spanish (ES)
+- German (DE)
 
-When `lenis.stop()` is called, it sets an internal `_isStopped` flag. However, the wheel event listeners remain active with `{ passive: false }`. When a wheel event fires, Lenis's `onVirtualScroll` handler checks `this.isStopped` and **still calls `event.preventDefault()`** on the wheel event (line 632-636 in lenis.mjs). This means even when "stopped", Lenis actively blocks native scrolling.
+## How It Works
 
-This is why the MutationObserver fix we already added has no effect.
+1. A new `LanguageContext` provider will store the current language and expose a `t()` translation function.
+2. A translations file will map every piece of UI text to all 4 languages.
+3. A `LanguageSwitcher` dropdown component (using the existing dropdown-menu UI) will sit in the navbar next to the theme toggle, showing a globe icon with a compact language code.
+4. The selected language persists in `localStorage`.
 
-### Solution
+## What Changes
 
-Use Lenis's built-in `data-lenis-prevent` attribute. When Lenis encounters this attribute on any element in the event's composed path, it returns early from `onVirtualScroll` WITHOUT calling `preventDefault()` (line 628-631). This allows native scrolling to work.
+### New Files
 
-Two changes:
+- `**src/i18n/translations.ts**` -- All translatable strings keyed by section (hero, about, skills, contact, navbar, footer).
+- `**src/i18n/LanguageContext.tsx**` -- React context providing `language`, `setLanguage`, and `t(key)`.
+- `**src/components/LanguageSwitcher.tsx**` -- Globe icon dropdown with 4 language options.
 
-**1. Add `data-lenis-prevent` to DialogContent** (`src/components/ui/dialog.tsx`)
+### Modified Files
 
-Add the `data-lenis-prevent` attribute directly on `DialogPrimitive.Content`. When Lenis sees this attribute on any ancestor of the wheel event target, it skips its scroll handling entirely, allowing native `overflow-y-auto` scrolling to work.
+- `**src/App.tsx**` -- Wrap app with `LanguageProvider`.
+- `**src/components/Navbar.tsx**` -- Add `LanguageSwitcher` next to `ThemeToggle`.
+- `**src/components/HeroSection.tsx**` -- Replace hardcoded strings with `t()` calls.
+- `**src/components/AboutSection.tsx**` -- Same.
+- `**src/components/SkillsSection.tsx**` -- Same.
+- `**src/components/ContactSection.tsx**` -- Same (labels, placeholders, headings).
+- `**src/components/Footer.tsx**` -- Same.
 
-**2. Keep the MutationObserver as a secondary safeguard** (`src/components/SmoothScrollProvider.tsx`)
+## Technical Details
 
-The existing MutationObserver code can stay -- it prevents Lenis from scrolling the background page while a dialog is open. But the primary fix is `data-lenis-prevent`.
+### Translation keys structure (example)
 
-### Files Changed
-
-**`src/components/ui/dialog.tsx`** -- Add `data-lenis-prevent` attribute to `DialogPrimitive.Content`:
-
-```text
-<DialogPrimitive.Content
-  ref={ref}
-  data-lenis-prevent          // <-- ADD THIS
-  className={cn(
-    "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ...",
-    "max-h-[85vh] overflow-y-auto",
-    className
-  )}
-  style={{
-    touchAction: 'auto',
-    overscrollBehaviorY: 'contain',
-    WebkitOverflowScrolling: 'touch',
-  }}
-  {...props}
->
+```typescript
+const translations = {
+  en: {
+    "hero.greeting": "Hello, I'm",
+    "hero.title": "Full Stack Developer & Designer",
+    "hero.description": "I craft beautiful, functional digital experiences...",
+    "hero.viewWork": "View My Work",
+    "hero.contactMe": "Contact Me",
+    "nav.about": "About",
+    "nav.skills": "Skills",
+    "nav.projects": "Projects",
+    "nav.contact": "Contact",
+    "nav.getInTouch": "Get in Touch",
+    // ... all other strings
+  },
+  ja: { /* Japanese translations */ },
+  es: { /* Spanish translations */ },
+  de: { /* German translations */ },
+};
 ```
 
-**`src/components/SmoothScrollProvider.tsx`** -- No changes needed. The existing MutationObserver code stays as-is for background scroll prevention.
+### LanguageSwitcher component
 
-### Why This Works
+- Uses the existing `DropdownMenu` component
+- Shows a `Globe` icon (from lucide-react) with the current language code
+- Lists all 4 languages with their native names (e.g., "日本語", "Español", "हिन्दी")
+- Saves selection to `localStorage`
 
-Lenis checks `event.composedPath()` for any element with the `data-lenis-prevent` attribute. When found, it immediately returns from `onVirtualScroll` without calling `event.preventDefault()`. This means:
+### Context usage
 
-- The browser's native wheel/touchpad event handling takes over
-- The dialog's `overflow-y-auto` works as expected
-- Vertical AND horizontal scrolling both work
-- No Lenis code runs at all for events inside the dialog
+```typescript
+const { t } = useLanguage();
+// In JSX:
+<p>{t("hero.greeting")}</p>
+```
 
-### Why Previous Fixes Failed
+## Notes
 
-- `lenis.stop()` -- Lenis still calls `preventDefault()` even when stopped
-- CSS changes (`touch-action`, `overflow-y-auto`) -- The issue was never CSS; it was JavaScript event interception
-- Wrapper div changes -- Same reason; Lenis intercepts at the event level before CSS can help
-
+- Skill names (React, TypeScript, etc.) and the portfolio owner's name will NOT be translated -- they stay in English.
+- Contact info (email, phone, address) stays as-is.
+- The language switcher will be responsive and work on both desktop and mobile nav.
