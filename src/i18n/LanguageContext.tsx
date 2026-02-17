@@ -5,6 +5,7 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  isTransitioning: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -20,10 +21,17 @@ const getInitialLanguage = (): Language => {
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
 
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem("portfolio-language", lang);
-  }, []);
+    if (lang === language) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setLanguageState(lang);
+      localStorage.setItem("portfolio-language", lang);
+      setTimeout(() => setIsTransitioning(false), 150);
+    }, 150);
+  }, [language]);
 
   const t = useCallback(
     (key: string): string => {
@@ -33,7 +41,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, isTransitioning }}>
       {children}
     </LanguageContext.Provider>
   );
