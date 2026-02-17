@@ -1,49 +1,52 @@
 
-# Smooth Language Transition Animation
+
+# Auto-Capture Project Screenshots
 
 ## Overview
-Add a fade-out/fade-in transition effect when switching languages, so text doesn't just snap to the new language but smoothly crossfades.
+Replace the client-side thum.io fallback with a backend function that captures screenshots of project URLs and permanently stores them in file storage. Screenshots will be auto-captured when saving a project and can also be manually re-captured via an admin button.
 
-## Approach
-Use a CSS-based transition on the main content area. When the language changes, the `LanguageProvider` will briefly set a `isTransitioning` state to true, which adds a CSS class that fades content out. After a short delay, the language updates and content fades back in.
+## How It Works
+When you add or update a project with a live URL, a backend function fetches a screenshot using a free screenshot service, stores the image permanently in your file storage, and saves the URL to the project's `image_url` field. This means previews load instantly every time -- no more waiting for on-demand generation.
 
-## Changes
-
-### 1. Update `src/i18n/LanguageContext.tsx`
-- Add an `isTransitioning` boolean to context
-- When `setLanguage` is called, set `isTransitioning = true`, wait ~150ms, update the language, then set `isTransitioning = false` after another ~150ms
-
-### 2. Update `src/App.tsx`
-- Wrap the main app content in a div that reads `isTransitioning` from context and applies an opacity/transition CSS class
-
-### 3. Update `src/index.css`
-- Add a utility class for the language transition (e.g., `.lang-transitioning` with `opacity: 0` and a CSS transition on opacity ~150ms)
+---
 
 ## Technical Details
 
-**LanguageContext changes:**
-```typescript
-// New state
-const [isTransitioning, setIsTransitioning] = useState(false);
+### 1. New Backend Function: `capture-screenshot`
 
-// Updated setLanguage
-const setLanguage = useCallback((lang: Language) => {
-  if (lang === language) return;
-  setIsTransitioning(true);
-  setTimeout(() => {
-    setLanguageState(lang);
-    localStorage.setItem("portfolio-language", lang);
-    setTimeout(() => setIsTransitioning(false), 150);
-  }, 150);
-}, [language]);
-```
+Create `supabase/functions/capture-screenshot/index.ts`:
+- Accepts `{ projectId, url }` in the request body
+- Requires admin authentication (uses `getClaims()`)
+- Fetches a screenshot from `https://image.thum.io/get/width/1280/noanimate/{url}` server-side
+- Uploads the resulting image to the `project-images` storage bucket
+- Updates the project's `image_url` column in the database
+- Returns the new public URL
 
-**App.tsx wrapper:**
-```tsx
-// A small wrapper component inside LanguageProvider that reads context
-<div className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-  {children}
-</div>
-```
+### 2. Update `supabase/config.toml`
+- Add `[functions.capture-screenshot]` with `verify_jwt = false`
 
-This creates a quick 150ms fade-out, language swap, then 150ms fade-in -- a subtle 300ms total transition that feels polished without being slow.
+### 3. New Hook: `src/hooks/use-capture-screenshot.ts`
+- A simple mutation hook that calls the edge function via `supabase.functions.invoke('capture-screenshot', ...)`
+- Returns loading state and trigger function
+
+### 4. Update Admin: Auto-capture on project create/update
+- In the admin panel's project save handler, after a successful create/update, if `image_url` is empty and `live_url` is present, automatically call the capture function
+
+### 5. Update Admin: Manual "Re-capture" button
+- Add a camera/refresh icon button on each `SortableProjectCard` that triggers the screenshot capture for that project
+- Shows a loading spinner while capturing
+
+### 6. Update `ProjectsSection.tsx`
+- Remove the thum.io fallback entirely -- if `image_url` is empty, just show the folder icon
+- Since screenshots are now stored, `image_url` will always be populated for projects with live URLs
+
+### File Changes Summary
+| File | Change |
+|------|--------|
+| `supabase/functions/capture-screenshot/index.ts` | New -- backend screenshot capture |
+| `supabase/config.toml` | Add function config (verify_jwt = false) |
+| `src/hooks/use-capture-screenshot.ts` | New -- mutation hook for triggering capture |
+| `src/components/admin/SortableProjectCard.tsx` | Add "Re-capture screenshot" button |
+| `src/pages/Admin.tsx` | Auto-trigger capture after project save |
+| `src/components/ProjectsSection.tsx` | Remove thum.io fallback |
+
