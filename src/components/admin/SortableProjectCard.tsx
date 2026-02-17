@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, Star, Eye, EyeOff, GripVertical } from "lucide-react";
+import { Pencil, Trash2, Star, Eye, EyeOff, GripVertical, Camera, Loader2 } from "lucide-react";
 import type { Project } from "@/hooks/use-projects";
 
 interface SortableProjectCardProps {
@@ -10,9 +10,11 @@ interface SortableProjectCardProps {
   onEdit: (project: Project) => void;
   onDelete: (id: string) => void;
   onToggleVisibility: (project: Project) => void;
+  onCaptureScreenshot?: (project: Project) => void;
+  isCapturing?: boolean;
 }
 
-const SortableProjectCard = ({ project, onEdit, onDelete, onToggleVisibility }: SortableProjectCardProps) => {
+const SortableProjectCard = ({ project, onEdit, onDelete, onToggleVisibility, onCaptureScreenshot, isCapturing }: SortableProjectCardProps) => {
   const {
     attributes,
     listeners,
@@ -60,6 +62,17 @@ const SortableProjectCard = ({ project, onEdit, onDelete, onToggleVisibility }: 
           </div>
         </div>
         <div className="flex gap-2 ml-4 shrink-0">
+          {onCaptureScreenshot && project.live_url && (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => onCaptureScreenshot(project)}
+              disabled={isCapturing}
+              title="Capture screenshot"
+            >
+              {isCapturing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+            </Button>
+          )}
           <Button
             variant="outline"
             size="icon"
