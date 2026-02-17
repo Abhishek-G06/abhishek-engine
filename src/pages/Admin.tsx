@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import GitHubImport from "@/components/admin/GitHubImport";
+import { useCaptureScreenshot } from "@/hooks/use-capture-screenshot";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
@@ -24,6 +25,7 @@ const Admin = () => {
   const createProject = useCreateProject();
   const updateProject = useUpdateProject();
   const deleteProject = useDeleteProject();
+  const { capture, isCapturing } = useCaptureScreenshot();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -86,9 +88,17 @@ const Admin = () => {
 
   const handleCreate = async (data: ProjectInsert) => {
     try {
-      await createProject.mutateAsync(data);
+      const created = await createProject.mutateAsync(data);
       toast.success("Project created");
       setShowForm(false);
+      // Auto-capture screenshot
+      if (!data.image_url && data.live_url && data.live_url !== "#") {
+        toast.info("Capturing screenshot...");
+        try {
+          await capture(created.id, data.live_url);
+          toast.success("Screenshot captured!");
+        } catch { toast.error("Screenshot capture failed"); }
+      }
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -100,6 +110,14 @@ const Admin = () => {
       await updateProject.mutateAsync({ id: editingProject.id, ...data });
       toast.success("Project updated");
       setEditingProject(null);
+      // Auto-capture if image_url cleared and live_url present
+      if (!data.image_url && data.live_url && data.live_url !== "#") {
+        toast.info("Capturing screenshot...");
+        try {
+          await capture(editingProject.id, data.live_url);
+          toast.success("Screenshot captured!");
+        } catch { toast.error("Screenshot capture failed"); }
+      }
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -222,6 +240,15 @@ const Admin = () => {
                     onEdit={setEditingProject}
                     onDelete={handleDelete}
                     onToggleVisibility={handleToggleVisibility}
+                    onCaptureScreenshot={async (p) => {
+                      if (!p.live_url) return;
+                      toast.info("Capturing screenshot...");
+                      try {
+                        await capture(p.id, p.live_url);
+                        toast.success("Screenshot captured!");
+                      } catch { toast.error("Screenshot capture failed"); }
+                    }}
+                    isCapturing={isCapturing(project.id)}
                   />
                 ))}
                 {filteredProjects.length === 0 && (
