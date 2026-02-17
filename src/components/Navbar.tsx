@@ -3,10 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -31,10 +34,10 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { label: "About", id: "about" },
-    { label: "Skills", id: "skills" },
-    { label: "Projects", id: "projects" },
-    { label: "Contact", id: "contact" },
+    { label: t("nav.about"), id: "about" },
+    { label: t("nav.skills"), id: "skills" },
+    { label: t("nav.projects"), id: "projects" },
+    { label: t("nav.contact"), id: "contact" },
   ];
 
   return (
@@ -51,7 +54,7 @@ const Navbar = () => {
             onClick={() => scrollToSection("hero")}
             className="text-xl lg:text-2xl font-bold text-foreground hover:text-primary transition-colors"
           >
-            Portfolio
+            {t("nav.portfolio")}
           </button>
 
           {/* Desktop Navigation */}
@@ -66,6 +69,7 @@ const Navbar = () => {
                 {link.label}
               </Button>
             ))}
+            <LanguageSwitcher />
             <ThemeToggle />
             <Button
               variant="hero"
@@ -73,12 +77,13 @@ const Navbar = () => {
               onClick={() => scrollToSection("contact")}
               className="ml-2"
             >
-              Get in Touch
+              {t("nav.getInTouch")}
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher />
             <ThemeToggle />
             <Button
               variant="ghost"
@@ -108,7 +113,7 @@ const Navbar = () => {
                 className="w-full mt-4"
                 onClick={() => scrollToSection("contact")}
               >
-                Get in Touch
+                {t("nav.getInTouch")}
               </Button>
             </div>
           </div>

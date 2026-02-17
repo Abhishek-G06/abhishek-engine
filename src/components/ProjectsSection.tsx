@@ -3,6 +3,7 @@ import { ExternalLink, Github, Folder } from "lucide-react";
 import { useGsapScroll } from "@/hooks/use-gsap-scroll";
 import ParallaxBackground from "@/components/ParallaxBackground";
 import { useProjects } from "@/hooks/use-projects";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const fallbackProjects = [
   {
@@ -28,6 +29,7 @@ const fallbackProjects = [
 const ProjectsSection = () => {
   const { sectionRef, contentRef } = useGsapScroll({ stagger: 0.12, y: 40 });
   const { data: dbProjects } = useProjects();
+  const { t } = useLanguage();
 
   const projects = dbProjects && dbProjects.length > 0
     ? dbProjects
@@ -54,12 +56,11 @@ const ProjectsSection = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 data-scroll className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              Featured Projects
+              {t("projects.title")}
             </h2>
             <div data-scroll className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
             <p data-scroll className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Here are some of my recent projects that showcase my skills and
-              passion for building great products.
+              {t("projects.subtitle")}
             </p>
           </div>
 

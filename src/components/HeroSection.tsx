@@ -5,10 +5,12 @@ import heroAvatar from "@/assets/hero-avatar.png";
 import heroAvatarAnimated from "@/assets/hero-avatar-animated.png";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HeroSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
@@ -173,7 +175,7 @@ const HeroSection = () => {
               className="text-primary font-medium mb-4"
               style={{ visibility: "hidden" }}
             >
-              Hello, I'm
+              {t("hero.greeting")}
             </p>
             <h1
               data-animate="name"
@@ -187,15 +189,14 @@ const HeroSection = () => {
               className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-serif mb-8"
               style={{ visibility: "hidden" }}
             >
-              Full Stack Developer & Designer
+              {t("hero.title")}
             </h2>
             <p
               data-animate="description"
               className="text-foreground/70 text-lg max-w-lg mx-auto lg:mx-0 mb-10"
               style={{ visibility: "hidden" }}
             >
-              I craft beautiful, functional digital experiences that help
-              businesses grow and users smile.
+              {t("hero.description")}
             </p>
 
             {/* CTA Buttons */}
@@ -209,14 +210,14 @@ const HeroSection = () => {
                 size="xl"
                 onClick={() => scrollToSection("projects")}
               >
-                View My Work
+                {t("hero.viewWork")}
               </Button>
               <Button
                 variant="heroOutline"
                 size="xl"
                 onClick={() => scrollToSection("contact")}
               >
-                Contact Me
+                {t("hero.contactMe")}
               </Button>
             </div>
 
