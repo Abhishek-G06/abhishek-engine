@@ -1,8 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import heroAvatar from "@/assets/hero-avatar.png";
-import heroAvatarAnimated from "@/assets/hero-avatar-animated.png";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -243,18 +242,7 @@ const HeroSection = () => {
             className="flex-shrink-0 lg:order-first"
           >
             <div className="relative">
-              <div className="group w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background relative cursor-pointer">
-                <img
-                  src={heroAvatar}
-                  alt="Abhishek Gupta - Full Stack Developer"
-                  className="w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500 group-hover:opacity-0"
-                />
-                <img
-                  src={heroAvatarAnimated}
-                  alt="Abhishek Gupta - Animated Avatar"
-                  className="w-full h-full object-cover object-top absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                />
-              </div>
+              <HeroAvatar />
             </div>
           </div>
         </div>
@@ -263,12 +251,57 @@ const HeroSection = () => {
         <button
           ref={scrollIndicatorRef}
           onClick={() => scrollToSection("about")}
+          aria-label="Scroll to about section"
           className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowDown className="w-6 h-6" />
         </button>
       </div>
     </section>
+  );
+};
+
+const HeroAvatar = () => {
+  const [showAnimated, setShowAnimated] = useState(false);
+  const [animatedSrc, setAnimatedSrc] = useState<string | null>(null);
+
+  const handleMouseEnter = () => {
+    if (!animatedSrc) {
+      import("@/assets/hero-avatar-animated.png").then((mod) => {
+        setAnimatedSrc(mod.default);
+        setShowAnimated(true);
+      });
+    } else {
+      setShowAnimated(true);
+    }
+  };
+
+  return (
+    <div
+      className="group w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background relative cursor-pointer"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={() => setShowAnimated(false)}
+    >
+      <img
+        src={heroAvatar}
+        alt="Abhishek Gupta - Full Stack Developer"
+        width={384}
+        height={384}
+        fetchPriority="high"
+        className="w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500"
+        style={{ opacity: showAnimated ? 0 : 1 }}
+      />
+      {animatedSrc && (
+        <img
+          src={animatedSrc}
+          alt="Abhishek Gupta - Animated Avatar"
+          width={384}
+          height={384}
+          className="w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500"
+          style={{ opacity: showAnimated ? 1 : 0 }}
+        />
+      )}
+    </div>
   );
 };
 

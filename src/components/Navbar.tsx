@@ -88,6 +88,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X /> : <Menu />}

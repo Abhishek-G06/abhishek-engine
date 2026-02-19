@@ -1,13 +1,15 @@
+import { lazy, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import AboutSection from "@/components/AboutSection";
-import SkillsSection from "@/components/SkillsSection";
-import ProjectsSection from "@/components/ProjectsSection";
-import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
-import ParticlesBackground from "@/components/ParticlesBackground";
+
+const ParticlesBackground = lazy(() => import("@/components/ParticlesBackground"));
+const AboutSection = lazy(() => import("@/components/AboutSection"));
+const SkillsSection = lazy(() => import("@/components/SkillsSection"));
+const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
+const ContactSection = lazy(() => import("@/components/ContactSection"));
 
 const Index = () => {
   return (
@@ -39,14 +41,24 @@ const Index = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background relative">
-        <ParticlesBackground />
+        <Suspense fallback={null}>
+          <ParticlesBackground />
+        </Suspense>
         <Navbar />
         <main>
           <HeroSection />
-          <AboutSection />
-          <SkillsSection />
-          <ProjectsSection />
-          <ContactSection />
+          <Suspense fallback={<div className="min-h-[50vh]" />}>
+            <AboutSection />
+          </Suspense>
+          <Suspense fallback={<div className="min-h-[50vh]" />}>
+            <SkillsSection />
+          </Suspense>
+          <Suspense fallback={<div className="min-h-[50vh]" />}>
+            <ProjectsSection />
+          </Suspense>
+          <Suspense fallback={<div className="min-h-[50vh]" />}>
+            <ContactSection />
+          </Suspense>
         </main>
         <Footer />
         <BackToTop />
