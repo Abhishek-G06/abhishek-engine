@@ -23,6 +23,19 @@ const Index = () => {
           content="web developer, full stack developer, react developer, portfolio, frontend developer"
         />
         <link rel="canonical" href="https://abhishek-engine.lovable.app" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Abhishek Gupta",
+            "url": "https://abhishek-engine.lovable.app",
+            "jobTitle": "Full Stack Developer",
+            "sameAs": [
+              "https://github.com/Abhishek-G06",
+              "https://www.linkedin.com/in/abhishek-gupta-667229189/"
+            ]
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-background relative">
