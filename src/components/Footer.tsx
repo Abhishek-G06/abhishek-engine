@@ -1,16 +1,15 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLenis } from "@/components/SmoothScrollProvider";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
+  const lenis = useLenis();
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    lenis?.scrollTo(`#${sectionId}`);
   };
 
   const footerLinks = [

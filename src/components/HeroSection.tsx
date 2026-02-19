@@ -5,21 +5,20 @@ import heroAvatar from "@/assets/hero-avatar.png";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLenis } from "@/components/SmoothScrollProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HeroSection = () => {
   const { t } = useLanguage();
+  const lenis = useLenis();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLButtonElement>(null);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    lenis?.scrollTo(`#${sectionId}`);
   };
 
   useEffect(() => {
