@@ -1,52 +1,59 @@
 
 
-# Auto-Capture Project Screenshots
+# SEO & Discoverability Improvements Plan
 
-## Overview
-Replace the client-side thum.io fallback with a backend function that captures screenshots of project URLs and permanently stores them in file storage. Screenshots will be auto-captured when saving a project and can also be manually re-captured via an admin button.
+## What I Will Automate (4 items)
 
-## How It Works
-When you add or update a project with a live URL, a backend function fetches a screenshot using a free screenshot service, stores the image permanently in your file storage, and saves the URL to the project's `image_url` field. This means previews load instantly every time -- no more waiting for on-demand generation.
+### 1. Create `public/sitemap.xml`
+A static sitemap listing your main page URL so search engines know what to crawl.
+
+### 2. Update `public/robots.txt`
+Add a `Sitemap:` directive pointing to the sitemap so crawlers find it automatically.
+
+### 3. Fix Open Graph & Twitter Tags in `index.html`
+- Change `og:image` from a URL to an actual image (your hero avatar PNG)
+- Add missing `og:url` tag
+- Add `twitter:title` and `twitter:description`
+- Fix empty `twitter:image`
+
+### 4. Create an IndexNow Edge Function
+A backend function that pings Bing/Yandex whenever you publish updates, so they index your site faster. I will also create a simple API key file at `public/<key>.txt` as required by the IndexNow protocol.
+
+---
+
+## What You Must Do Manually (with step-by-step guides)
+
+### A. Google Search Console
+1. Go to [Google Search Console](https://search.google.com/search-console)
+2. Click "Add Property" and enter `https://abhishek-engine.lovable.app`
+3. Choose "URL prefix" method
+4. Select the "HTML tag" verification method -- Google will give you a meta tag like:
+   `<meta name="google-site-verification" content="XXXX" />`
+5. Come back here and paste that tag -- I will add it to your site
+6. After publishing, click "Verify" in Google Search Console
+7. Submit your sitemap URL: `https://abhishek-engine.lovable.app/sitemap.xml`
+
+### B. Bing Webmaster Tools
+1. Go to [Bing Webmaster Tools](https://www.bing.com/webmasters)
+2. Sign in and add your site: `https://abhishek-engine.lovable.app`
+3. Choose "HTML Meta Tag" verification -- Bing gives you a tag like:
+   `<meta name="msvalidate.01" content="XXXX" />`
+4. Come back here and paste that tag -- I will add it to your site
+5. After publishing, click "Verify" in Bing Webmaster Tools
+6. Submit your sitemap URL: `https://abhishek-engine.lovable.app/sitemap.xml`
 
 ---
 
 ## Technical Details
 
-### 1. New Backend Function: `capture-screenshot`
+**Files to create:**
+- `public/sitemap.xml` -- static XML sitemap
+- `public/<indexnow-key>.txt` -- IndexNow verification key
+- `supabase/functions/index-now/index.ts` -- Edge function to ping IndexNow API
 
-Create `supabase/functions/capture-screenshot/index.ts`:
-- Accepts `{ projectId, url }` in the request body
-- Requires admin authentication (uses `getClaims()`)
-- Fetches a screenshot from `https://image.thum.io/get/width/1280/noanimate/{url}` server-side
-- Uploads the resulting image to the `project-images` storage bucket
-- Updates the project's `image_url` column in the database
-- Returns the new public URL
+**Files to modify:**
+- `index.html` -- fix OG/Twitter meta tags, remove TODO comments
+- `public/robots.txt` -- add Sitemap directive
 
-### 2. Update `supabase/config.toml`
-- Add `[functions.capture-screenshot]` with `verify_jwt = false`
-
-### 3. New Hook: `src/hooks/use-capture-screenshot.ts`
-- A simple mutation hook that calls the edge function via `supabase.functions.invoke('capture-screenshot', ...)`
-- Returns loading state and trigger function
-
-### 4. Update Admin: Auto-capture on project create/update
-- In the admin panel's project save handler, after a successful create/update, if `image_url` is empty and `live_url` is present, automatically call the capture function
-
-### 5. Update Admin: Manual "Re-capture" button
-- Add a camera/refresh icon button on each `SortableProjectCard` that triggers the screenshot capture for that project
-- Shows a loading spinner while capturing
-
-### 6. Update `ProjectsSection.tsx`
-- Remove the thum.io fallback entirely -- if `image_url` is empty, just show the folder icon
-- Since screenshots are now stored, `image_url` will always be populated for projects with live URLs
-
-### File Changes Summary
-| File | Change |
-|------|--------|
-| `supabase/functions/capture-screenshot/index.ts` | New -- backend screenshot capture |
-| `supabase/config.toml` | Add function config (verify_jwt = false) |
-| `src/hooks/use-capture-screenshot.ts` | New -- mutation hook for triggering capture |
-| `src/components/admin/SortableProjectCard.tsx` | Add "Re-capture screenshot" button |
-| `src/pages/Admin.tsx` | Auto-trigger capture after project save |
-| `src/components/ProjectsSection.tsx` | Remove thum.io fallback |
+**OG image approach:** I will use the hero avatar image hosted in the `src/assets/` folder by copying it to `public/og-image.png` so it is accessible at a static URL for social sharing previews.
 
