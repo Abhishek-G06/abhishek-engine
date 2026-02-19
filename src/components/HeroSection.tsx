@@ -46,7 +46,6 @@ const HeroSection = () => {
         opacity: 0, 
         x: isMobile ? 0 : 100,
         y: isMobile ? 40 : 0,
-        visibility: "hidden"
       });
       
       // Avatar slides in from the left (desktop) or top (mobile)
@@ -54,12 +53,10 @@ const HeroSection = () => {
         opacity: 0, 
         x: isMobile ? 0 : -100,
         y: isMobile ? -40 : 0,
-        visibility: "hidden"
       });
       
       gsap.set(scrollIndicatorRef.current, { 
         opacity: 0,
-        visibility: "hidden"
       });
 
       // Create timeline with 300ms initial delay
@@ -75,55 +72,46 @@ const HeroSection = () => {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.4,
       })
       .to(name, {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.4,
-      }, "-=1.2") // Stagger: 0.2s
+      }, "-=1.2")
       .to(title, {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(description, {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(buttons, {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
       .to(socials, {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.4,
       }, "-=1.2")
-      // Avatar slides in from left/top
       .to(avatarRef.current, {
         opacity: 1,
         x: 0,
         y: 0,
-        visibility: "visible",
         duration: 1.6,
       }, "-=1.4")
       .to(scrollIndicatorRef.current, {
         opacity: 1,
-        visibility: "visible",
         duration: 1.2,
       }, "-=0.8");
 
@@ -173,28 +161,24 @@ const HeroSection = () => {
             <p 
               data-animate="greeting"
               className="text-primary font-medium mb-4"
-              style={{ visibility: "hidden" }}
             >
               {t("hero.greeting")}
             </p>
             <h1
               data-animate="name"
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6"
-              style={{ visibility: "hidden" }}
             >
               Abhishek Gupta
             </h1>
             <h2
               data-animate="title"
               className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-serif mb-8"
-              style={{ visibility: "hidden" }}
             >
               {t("hero.title")}
             </h2>
             <p
               data-animate="description"
               className="text-foreground/70 text-lg max-w-lg mx-auto lg:mx-0 mb-10"
-              style={{ visibility: "hidden" }}
             >
               {t("hero.description")}
             </p>
@@ -203,7 +187,6 @@ const HeroSection = () => {
             <div
               data-animate="buttons"
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
-              style={{ visibility: "hidden" }}
             >
               <Button
                 variant="hero"
@@ -225,12 +208,12 @@ const HeroSection = () => {
             <div
               data-animate="socials"
               className="flex gap-4 justify-center lg:justify-start"
-              style={{ visibility: "hidden" }}
             >
               <a
                 href="https://github.com/Abhishek-G06"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub profile"
                 className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
               >
                 <Github className="w-5 h-5" />
@@ -239,12 +222,14 @@ const HeroSection = () => {
                 href="https://www.linkedin.com/in/abhishek-gupta-667229189/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn profile"
                 className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
                 href="mailto:abhi2002gupta@gmail.com"
+                aria-label="Send email"
                 className="p-3 rounded-full bg-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm hover:shadow-lg"
               >
                 <Mail className="w-5 h-5" />
@@ -256,7 +241,6 @@ const HeroSection = () => {
           <div
             ref={avatarRef}
             className="flex-shrink-0 lg:order-first"
-            style={{ visibility: "hidden" }}
           >
             <div className="relative">
               <div className="group w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl bg-background relative cursor-pointer">
@@ -280,7 +264,6 @@ const HeroSection = () => {
           ref={scrollIndicatorRef}
           onClick={() => scrollToSection("about")}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-primary transition-colors"
-          style={{ visibility: "hidden" }}
         >
           <ArrowDown className="w-6 h-6" />
         </button>

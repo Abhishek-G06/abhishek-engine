@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import translations, { Language } from "./translations";
 
 interface LanguageContextType {
@@ -29,9 +29,15 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     setTimeout(() => {
       setLanguageState(lang);
       localStorage.setItem("portfolio-language", lang);
+      document.documentElement.lang = lang;
       setTimeout(() => setIsTransitioning(false), 150);
     }, 150);
   }, [language]);
+
+  // Set initial lang attribute
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, []);
 
   const t = useCallback(
     (key: string): string => {
