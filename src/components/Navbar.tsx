@@ -5,11 +5,13 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLenis } from "@/components/SmoothScrollProvider";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const lenis = useLenis();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -25,10 +27,7 @@ const Navbar = () => {
     if (location.pathname !== "/") {
       navigate(`/#${sectionId}`);
     } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      lenis?.scrollTo(`#${sectionId}`);
     }
     setIsMobileMenuOpen(false);
   };

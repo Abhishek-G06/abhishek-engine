@@ -1,48 +1,50 @@
-import { useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const LenisContext = createContext<Lenis | null>(null);
+
+export const useLenis = () => useContext(LenisContext);
+
 interface SmoothScrollProviderProps {
   children: React.ReactNode;
 }
 
 const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
-  const lenisRef = useRef<Lenis | null>(null);
+  const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    const instance = new Lenis({
       duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
 
-    lenisRef.current = lenis;
+    setLenis(instance);
 
     // Pause Lenis when Radix dialog opens (body gets data-scroll-locked)
     const observer = new MutationObserver(() => {
       if (document.body.hasAttribute('data-scroll-locked')) {
-        lenis.stop();
+        instance.stop();
       } else {
-        lenis.start();
+        instance.start();
       }
     });
     observer.observe(document.body, { attributes: true, attributeFilter: ['data-scroll-locked'] });
 
     // Connect Lenis scroll to ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
+    instance.on("scroll", ScrollTrigger.update);
 
-    // Use requestAnimationFrame for Lenis
     function raf(time: number) {
-      lenis.raf(time);
+      instance.raf(time);
       requestAnimationFrame(raf);
     }
 
     const rafId = requestAnimationFrame(raf);
 
-    // Refresh ScrollTrigger once ready
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 100);
@@ -50,11 +52,11 @@ const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) => {
     return () => {
       observer.disconnect();
       cancelAnimationFrame(rafId);
-      lenis.destroy();
+      instance.destroy();
     };
   }, []);
 
-  return <>{children}</>;
+  return <LenisContext.Provider value={lenis}>{children}</LenisContext.Provider>;
 };
 
 export default SmoothScrollProvider;
