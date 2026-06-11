@@ -51,8 +51,8 @@ const ContactSection = () => {
 
   const contactInfo = [
     { icon: Mail, labelKey: "contact.email", value: "abhi2002gupta@gmail.com", href: "mailto:abhi2002gupta@gmail.com" },
-    { icon: MapPin, labelKey: "contact.location", value: "New Delhi, IN", href: "#" },
-    { icon: Phone, labelKey: "contact.phone", value: "+91 7355985582", href: "tel:+917355985582" },
+    { icon: MapPin, labelKey: "contact.location", value: "Tokyo, Japan", href: "#" },
+    { icon: Phone, labelKey: "contact.phone", value: "+91 7355985582/br+080 2055-2275", href: "tel:+917355985582/br+08020552275" },
   ];
 
   const socialLinks = [
