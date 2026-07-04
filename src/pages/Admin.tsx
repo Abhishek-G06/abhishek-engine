@@ -146,13 +146,31 @@ const Admin = () => {
     }
   };
 
+  const adminHead = (
+    <Helmet>
+      <title>Admin Dashboard | Abhishek Gupta Portfolio</title>
+      <meta
+        name="description"
+        content="Private admin dashboard for managing portfolio projects, GitHub imports, and screenshots on Abhishek Gupta's portfolio."
+      />
+      <meta name="robots" content="noindex, nofollow" />
+      <meta property="og:title" content="Admin Dashboard | Abhishek Gupta Portfolio" />
+      <meta property="og:description" content="Private admin dashboard for portfolio management." />
+      <meta property="og:url" content="https://abhishek-engine.lovable.app/admin" />
+    </Helmet>
+  );
+
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </>
     );
   }
+
 
   if (!user) {
     return (
