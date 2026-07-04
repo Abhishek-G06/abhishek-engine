@@ -9,6 +9,7 @@ import { LanguageProvider, useLanguage } from "@/i18n/LanguageContext";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
+import BlogPortfolioExamples from "./pages/BlogPortfolioExamples";
 import NotFound from "./pages/NotFound";
 import { ReactNode } from "react";
 
