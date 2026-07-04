@@ -166,7 +166,7 @@ const HeroSection = () => {
               data-animate="name"
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6"
             >
-              Abhishek Gupta
+              Abhishek Gupta — Full Stack Developer &amp; Designer
             </h1>
             <h2
               data-animate="title"

@@ -18,6 +18,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Plus, LogOut, ArrowLeft, Github, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { Helmet } from "react-helmet-async";
 
 const Admin = () => {
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
