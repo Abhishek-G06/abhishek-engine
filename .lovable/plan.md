@@ -1,42 +1,49 @@
+# Fix Lighthouse Performance & Accessibility Findings
 
-# Fix Choppy Scrolling
+Two failing Lighthouse findings from the last published scan:
 
-## Problem
-The site uses Lenis for smooth scrolling, but navigation clicks use `element.scrollIntoView({ behavior: "smooth" })` and `window.scrollTo()` — the browser's native smooth scroll. Two competing scroll systems cause the choppy/stuck feel.
+1. **Performance** — hero LCP paints slowly
+2. **Accessibility** — low-contrast text
 
-## Fix
-Expose the Lenis instance via React context, then replace all native scroll calls with `lenis.scrollTo()`.
+## 1. Performance: speed up hero LCP
 
----
+**File:** `src/components/HeroSection.tsx`
 
-## Changes
+The hero `<img>` already has `width/height` and `fetchPriority="high"`. Add:
+- `loading="eager"` (explicitly opt out of lazy)
+- `decoding="async"`
 
-### 1. SmoothScrollProvider.tsx
-- Create a React context that holds the Lenis instance
-- Export a `useLenis` hook so other components can access it
+The second `<img>` (animated avatar on hover) should stay `loading="lazy"` — it's not the LCP element and only shows on hover. Also gate its dynamic import behind the first hover instead of a mount-time `useEffect` so it doesn't compete for bandwidth during initial paint.
 
-### 2. Navbar.tsx
-- Replace `element.scrollIntoView({ behavior: "smooth" })` with `lenis.scrollTo("#sectionId")`
+**File:** `index.html`
 
-### 3. HeroSection.tsx
-- Same replacement for the CTA buttons and scroll indicator
+The Google Fonts stylesheet is render-blocking. Change the `<link rel="stylesheet">` to a non-blocking pattern:
 
-### 4. Footer.tsx
-- Same replacement for footer navigation links
+```html
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Inconsolata:wght@400;700&display=swap"
+  onload="this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="…same url…" /></noscript>
+```
 
-### 5. BackToTop.tsx
-- Replace `window.scrollTo({ top: 0, behavior: "smooth" })` with `lenis.scrollTo(0)`
+The URL already has `display=swap`, so text paints in the fallback immediately.
 
----
+## 2. Accessibility: fix low-contrast text
 
-## Technical Summary
+**File:** `src/components/Footer.tsx` (line 57)
 
-| File | Change |
-|------|--------|
-| `SmoothScrollProvider.tsx` | Add context + `useLenis` hook |
-| `Navbar.tsx` | Use `lenis.scrollTo("#id")` |
-| `HeroSection.tsx` | Use `lenis.scrollTo("#id")` |
-| `Footer.tsx` | Use `lenis.scrollTo("#id")` |
-| `BackToTop.tsx` | Use `lenis.scrollTo(0)` |
+The admin link uses `text-muted-foreground/50`, which fails 4.5:1 contrast on the footer background. Replace with `text-muted-foreground` (still muted, but passes AA).
 
-No dependencies added, no major refactors. Just routing all scroll calls through Lenis.
+I'll also scan the rendered footer/hero for any other arbitrary muted opacity classes on visible text and bump them to full-strength tokens.
+
+## Out of scope
+
+- The other two failing findings (Google Search Console setup, Semrush blog suggestion) — user asked only for Lighthouse fixes.
+- No refactors, no dependency changes.
+
+## After the fix
+
+Republish so Lighthouse re-scans the live URL — source changes don't affect the published scan until deploy.

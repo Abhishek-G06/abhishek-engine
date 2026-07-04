@@ -54,7 +54,7 @@ const Footer = () => {
               © {currentYear} Abhishek Gupta. {t("footer.madeWith")}{" "}
               <Heart className="w-4 h-4 text-destructive fill-destructive" /> {t("footer.rights")}
             </p>
-            <Link to="/admin" className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+            <Link to="/admin" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Admin
             </Link>
           </div>
