@@ -287,6 +287,8 @@ const HeroAvatar = () => {
         width={384}
         height={384}
         fetchPriority="high"
+        loading="eager"
+        decoding="async"
         className="w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500"
         style={{ opacity: showAnimated ? 0 : 1 }}
       />
@@ -296,6 +298,8 @@ const HeroAvatar = () => {
           alt="Abhishek Gupta - Animated Avatar"
           width={384}
           height={384}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500"
           style={{ opacity: showAnimated ? 1 : 0 }}
         />
