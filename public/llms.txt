@@ -1,0 +1,14 @@
+# Abhishek Gupta — Portfolio
+
+> Portfolio of Abhishek Gupta, a Full Stack (MERN) developer building interactive, 3D-enhanced web experiences.
+
+Abhishek Gupta is a Full Stack Developer specializing in the MERN stack (MongoDB, Express, React, Node.js) with a focus on creative, interactive, and 3D web engineering. This site showcases his projects, skills, and contact information.
+
+## Pages
+
+- [Home](/): Overview, hero introduction, about, skills, featured projects, and contact section.
+
+## Optional
+
+- [GitHub](https://github.com/Abhishek-G06): Source code and open-source contributions.
+- [LinkedIn](https://www.linkedin.com/in/abhishek-gupta-667229189/): Professional background.

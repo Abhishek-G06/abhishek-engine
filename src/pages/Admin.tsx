@@ -18,6 +18,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Plus, LogOut, ArrowLeft, Github, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { Helmet } from "react-helmet-async";
 
 const Admin = () => {
   const { user, loading: authLoading, signIn, signUp, signOut } = useAuth();
@@ -145,41 +146,65 @@ const Admin = () => {
     }
   };
 
+  const adminHead = (
+    <Helmet>
+      <title>Admin Dashboard | Abhishek Gupta Portfolio</title>
+      <meta
+        name="description"
+        content="Private admin dashboard for managing portfolio projects, GitHub imports, and screenshots on Abhishek Gupta's portfolio."
+      />
+      <meta name="robots" content="noindex, nofollow" />
+      <meta property="og:title" content="Admin Dashboard | Abhishek Gupta Portfolio" />
+      <meta property="og:description" content="Private admin dashboard for portfolio management." />
+      <meta property="og:url" content="https://abhishek-engine.lovable.app/admin" />
+    </Helmet>
+  );
+
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </>
     );
   }
 
+
   if (!user) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-center">Admin Login</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              </div>
-              <div>
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              </div>
-              <Button type="submit" className="w-full">Sign In</Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="text-center">Admin Login</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </div>
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                </div>
+                <Button type="submit" className="w-full">Sign In</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      {adminHead}
+      <div className="min-h-screen bg-background">
+
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -306,6 +331,7 @@ const Admin = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </>
   );
 };
 

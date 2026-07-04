@@ -12,5 +12,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
 
 Sitemap: https://abhishek-engine.lovable.app/sitemap.xml
