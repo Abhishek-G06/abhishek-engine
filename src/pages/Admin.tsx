@@ -331,7 +331,9 @@ const Admin = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </>
   );
+};
 };
 
 export default Admin;
