@@ -112,6 +112,7 @@ const ProjectsSection = () => {
                           href={project.live_url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`Visit live demo of ${project.title}`}
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
                           Live Demo
@@ -122,9 +123,11 @@ const ProjectsSection = () => {
                           href={project.github_url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`View source code of ${project.title} on GitHub`}
                         >
                           <Github className="w-4 h-4" />
                         </a>
+
                       </Button>
                     </div>
                   </div>
@@ -149,6 +152,7 @@ const ProjectsSection = () => {
                         href={project.github_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`View source code of ${project.title} on GitHub`}
                         className="text-muted-foreground hover:text-primary transition-colors"
                       >
                         <Github className="w-5 h-5" />
@@ -157,10 +161,12 @@ const ProjectsSection = () => {
                         href={project.live_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`Visit live website for ${project.title}`}
                         className="text-muted-foreground hover:text-primary transition-colors"
                       >
                         <ExternalLink className="w-5 h-5" />
                       </a>
+
                     </div>
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
