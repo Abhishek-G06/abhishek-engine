@@ -9,6 +9,7 @@ import { LanguageProvider, useLanguage } from "@/i18n/LanguageContext";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
+import BlogPortfolioExamples from "./pages/BlogPortfolioExamples";
 import NotFound from "./pages/NotFound";
 import { ReactNode } from "react";
 
@@ -37,6 +38,7 @@ const App = () => (
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/blog/portfolio-examples" element={<BlogPortfolioExamples />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
