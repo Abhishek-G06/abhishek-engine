@@ -217,6 +217,41 @@ const Admin = () => {
     );
   }
 
+  if (isAdmin === null) {
+    return (
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <p className="text-muted-foreground">Verifying access...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (isAdmin === false) {
+    return (
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="text-center">Access Denied</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-center">
+              <p className="text-muted-foreground text-sm">
+                Your account is not authorized to view this page.
+              </p>
+              <Button variant="outline" className="w-full" onClick={signOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       {adminHead}
