@@ -12,7 +12,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const getInitialLanguage = (): Language => {
   const stored = localStorage.getItem("portfolio-language");
-  if (stored && ["en", "ja", "es", "de"].includes(stored)) {
+  if (stored && ["en", "ja", "es", "de", "zh", "pt"].includes(stored)) {
     return stored as Language;
   }
   return "en";
