@@ -54,14 +54,14 @@ Deno.serve(async (req) => {
         sender: { name: "Portfolio Contact", email: "abhi2002gupta@gmail.com" },
         to: [{ email: "abhi2002gupta@gmail.com", name: "Abhishek Gupta" }],
         replyTo: { email, name },
-        subject: `Portfolio Contact: ${subject}`,
+        subject: `Portfolio Contact: ${esc(subject)}`,
         htmlContent: `
           <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject}</p>
+          <p><strong>Name:</strong> ${esc(name)}</p>
+          <p><strong>Email:</strong> ${esc(email)}</p>
+          <p><strong>Subject:</strong> ${esc(subject)}</p>
           <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, "<br>")}</p>
+          <p>${esc(message).replace(/\n/g, "<br>")}</p>
         `,
       }),
     });
@@ -90,14 +90,14 @@ Deno.serve(async (req) => {
               <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
                 <tr>
                   <td style="background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:40px 40px 32px;text-align:center;">
-                    <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-0.5px;">Thank You, ${name}! ✨</h1>
+                    <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-0.5px;">Thank You, ${esc(name)}! ✨</h1>
                     <p style="margin:8px 0 0;color:rgba(255,255,255,0.85);font-size:15px;">Your message has been received</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:36px 40px;">
                     <p style="margin:0 0 20px;color:#27272a;font-size:15px;line-height:1.7;">
-                      Hi <strong>${name}</strong>,
+                      Hi <strong>${esc(name)}</strong>,
                     </p>
                     <p style="margin:0 0 20px;color:#3f3f46;font-size:15px;line-height:1.7;">
                       Thanks for reaching out! I've received your message and truly appreciate you taking the time to connect. I'll review your inquiry and get back to you as soon as possible — typically within <strong>24–48 hours</strong>.
@@ -106,8 +106,8 @@ Deno.serve(async (req) => {
                       <tr>
                         <td style="padding:24px;">
                           <p style="margin:0 0 8px;color:#71717a;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Your Message Summary</p>
-                          <p style="margin:0 0 6px;color:#27272a;font-size:14px;"><strong>Subject:</strong> ${subject}</p>
-                          <p style="margin:0;color:#52525b;font-size:14px;line-height:1.6;">${message.replace(/\n/g, "<br>")}</p>
+                          <p style="margin:0 0 6px;color:#27272a;font-size:14px;"><strong>Subject:</strong> ${esc(subject)}</p>
+                          <p style="margin:0;color:#52525b;font-size:14px;line-height:1.6;">${esc(message).replace(/\n/g, "<br>")}</p>
                         </td>
                       </tr>
                     </table>
