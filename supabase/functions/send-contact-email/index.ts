@@ -153,7 +153,7 @@ Deno.serve(async (req) => {
         sender: { name: "Abhishek Gupta", email: "abhi2002gupta@gmail.com" },
         to: [{ email, name }],
         replyTo: { email: "abhi2002gupta@gmail.com", name: "Abhishek Gupta" },
-        subject: `Thanks for reaching out, ${name}! 🙌`,
+        subject: `Thanks for reaching out, ${esc(name)}! 🙌`,
         htmlContent: autoReplyHtml,
       }),
     });
