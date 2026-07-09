@@ -1,10 +1,12 @@
-export type Language = "en" | "ja" | "es" | "de";
+export type Language = "en" | "ja" | "es" | "de" | "zh" | "pt";
 
 export const languageNames: Record<Language, string> = {
   en: "English",
   ja: "日本語",
   es: "Español",
   de: "Deutsch",
+  zh: "中文",
+  pt: "Português",
 };
 
 const translations: Record<Language, Record<string, string>> = {
