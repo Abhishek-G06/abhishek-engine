@@ -35,6 +35,22 @@ const Admin = () => {
   const [showForm, setShowForm] = useState(false);
   const [showGitHub, setShowGitHub] = useState(false);
   const [search, setSearch] = useState("");
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
+      if (cancelled) return;
+      if (error) { setIsAdmin(false); return; }
+      setIsAdmin(!!data);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
