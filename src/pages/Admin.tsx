@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from "@/hooks/use-projects";
 import type { Project, ProjectInsert } from "@/hooks/use-projects";
 import ProjectForm from "@/components/admin/ProjectForm";
@@ -34,6 +35,22 @@ const Admin = () => {
   const [showForm, setShowForm] = useState(false);
   const [showGitHub, setShowGitHub] = useState(false);
   const [search, setSearch] = useState("");
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
+      if (cancelled) return;
+      if (error) { setIsAdmin(false); return; }
+      setIsAdmin(!!data);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -193,6 +210,41 @@ const Admin = () => {
                 </div>
                 <Button type="submit" className="w-full">Sign In</Button>
               </form>
+            </CardContent>
+          </Card>
+        </div>
+      </>
+    );
+  }
+
+  if (isAdmin === null) {
+    return (
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <p className="text-muted-foreground">Verifying access...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (isAdmin === false) {
+    return (
+      <>
+        {adminHead}
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="text-center">Access Denied</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-center">
+              <p className="text-muted-foreground text-sm">
+                Your account is not authorized to view this page.
+              </p>
+              <Button variant="outline" className="w-full" onClick={signOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
             </CardContent>
           </Card>
         </div>
