@@ -2,6 +2,14 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY")!;
 
+const esc = (s: string) =>
+  String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
